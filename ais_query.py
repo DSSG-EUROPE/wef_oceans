@@ -11,18 +11,18 @@ import pandas as pd
 from configparser import ConfigParser
 
 columns_static = ['msg_type',
-		  'mmsi', 
-		  'timestamp', 
-		  'nmea',
-		  'imo',
-		  'name',
-		  'ship_and_cargo_type',
-		  'length',
-		  'width',
-		  'draught',
-		  'eta_date',
-		  'destination',
-		  'call_sign']
+                  'mmsi',
+                  'timestamp',
+                  'nmea',
+                  'imo',
+                  'name',
+                  'ship_and_cargo_type',
+                  'length',
+                  'width',
+                  'draught',
+                  'eta_date',
+                  'destination',
+                  'call_sign']
 
 columns_position = ['msg_type',
                     'mmsi',
@@ -84,5 +84,5 @@ def connect(sql_query):
 
 
 if __name__ == '__main__':
-    spire_ais = connect(sql_query) 
+    spire_ais = connect(sql_query)
     print(spire_ais)
