@@ -13,7 +13,6 @@ from configparser import ConfigParser
 columns_static = ['msg_type',
                   'mmsi',
                   'timestamp',
-                  'nmea',
                   'imo',
                   'name',
                   'ship_and_cargo_type',
@@ -21,13 +20,12 @@ columns_static = ['msg_type',
                   'width',
                   'draught',
                   'eta_date',
-                  'destination',
-                  'call_sign']
+                  'call_sign',
+                  'destination']
 
 columns_position = ['msg_type',
                     'mmsi',
                     'timestamp',
-                    'nmea',
                     'status',
                     'rot',
                     'speed',
@@ -36,7 +34,7 @@ columns_position = ['msg_type',
                     'latitude',
                     'course',
                     'heading',
-                    'manever',
+                    'maneuver',
                     'geom']
 
 
