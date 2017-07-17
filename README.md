@@ -10,6 +10,45 @@ There are many challenges associated with detecting IUU fishing. Firstly, the wo
 
 A socially desirable outcome for this project would be to successfully demonstrate how these data can be used to identify IUU fishing. In partnership with the WEF and organisations this can be conveyed to policy and decision makers to expand the study. A socially desirable outcome would be to improve detection of illegal fishing via these data sources, a secondary outcome of this would be to provide improved enforcement of illegal fishing, which in turn would improve regulation as it becomes harder to evade capture. The result of this would be to promote more sustainable fishing practice and environmental conservation. 
 
+```
+.
+├── data
+│   └── ais_query.py
+├── docs
+│   ├── database.ini
+│   └── iuu_list_of_lists.csv
+├── envs
+│   ├── ais_env.yml
+│   ├── gbdx_env.yml
+│   └── modis_env.yml
+├── LICENSE
+├── models
+├── notebooks
+│   ├── data_exploration
+│   │   ├── 0.0-wg-ais_eda_2month.ipynb
+│   │   ├── 0.1-wg-ais_eda_1year.ipynb
+│   │   ├── 1.0-wg-ais_iuu_list_intersection_2month.ipynb
+│   │   ├── 1.1-wg-ais_iuu_list_intersection_1year.ipynb
+│   │   └── 2.0-im-ais_gbdx_intersection.ipynb
+│   ├── gbdx
+│   │   ├── gbdx_data_description_html.ipynb
+│   │   └── gbdx_data_description.ipynb
+│   └── planet
+│       ├── planet_labs_data_ais.ipynb
+│       └── planet_search.py
+├── __pycache__
+│   └── ais_query.cpython-35.pyc
+├── README.md
+├── reports
+│   └── gbdx_torres_strait_coverage.html
+└── src
+    ├── feature_generation
+    │   └── distance_from_shore.ipynb
+    ├── __init__.py
+    └── models
+        └── Fishing or not model.ipynb
+```
+
 ## Automatic Identification System (AIS) data
 Data for this project was provided by SPIRE
 https://spire.com/
