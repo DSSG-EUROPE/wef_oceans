@@ -138,7 +138,6 @@ CREATE INDEX full_year_static_mmsi_idx ON ais_messages.full_year_static (mmsi) ;
 
 ```
 DELETE
-SELECT *
 FROM ais_messages.full_year_position
 WHERE (mmsi IS NULL OR mmsi < 100000000) 
 OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00') 
@@ -149,7 +148,6 @@ OR (latitude IS NULL OR latitude NOT BETWEEN -90 AND 90);
 
 ```
 DELETE
-SELECT *
 FROM ais_messages.full_year_static
 WHERE (mmsi IS NULL OR mmsi < 100000000) 
 OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00');
