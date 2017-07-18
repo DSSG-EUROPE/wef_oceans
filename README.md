@@ -133,3 +133,24 @@ CREATE INDEX full_year_position_mmsi_idx ON ais_messages.full_year_position (mms
 CREATE INDEX full_year_position_geom_idx ON ais_messages.full_year_position (geom) ;
 CREATE INDEX full_year_static_mmsi_idx ON ais_messages.full_year_static (mmsi) ;
 ```
+
+10. clean data
+
+```
+DELETE
+SELECT *
+FROM ais_messages.full_year_position
+WHERE (mmsi IS NULL OR mmsi < 100000000) 
+OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00') 
+OR (longitude IS NULL OR longitude NOT BETWEEN -180 AND 180)
+OR (latitude IS NULL OR latitude NOT BETWEEN -90 AND 90);
+
+```
+
+```
+DELETE
+SELECT *
+FROM ais_messages.full_year_static
+WHERE (mmsi IS NULL OR mmsi < 100000000) 
+OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00');
+```
