@@ -1,8 +1,8 @@
 """
-Models to predict whether vessels are fishing or not.
-Labelled data was provided by Kristina Boerder at Dalhousie
-University. The data has AIS messages and labels for weather the ship was
-fishing or not and the type of fishing gear used.
+models to predict whether a vessel is fishing or not for a given time point.
+Labelled data was provided by Kristina Boerder at Dalhousie University.
+The data has AIS messages and labels for whether the ship was fishing or not
+and the type of fishing gear used.
 
 [Global Fishing Watch](https://github.com/GlobalFishingWatch/training-data)
 """
@@ -11,21 +11,19 @@ fishing or not and the type of fishing gear used.
 import os
 import numpy as np
 import pandas as pd
-import pytz
+
 import utils
 from utils import db_connect
-
 
 import feature_generation
 from feature_generation import ais_distance_calculations
 #import importlib
 #reload(feature_generation)
 
-from datetime import datetime, timedelta
 
 from sklearn.model_selection import train_test_split
 
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 
 from sklearn.metrics import precision_score
 from sklearn.metrics import roc_curve, auc
@@ -38,12 +36,19 @@ from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import classification_report
 from sklearn.linear_model import LogisticRegression
 
-def convert_epoch_to_datetime(timestamp):
-    """ convert timestamps to Eastern Australian time-zone """
-    utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
-    au_tz = pytz.timezone('Australia/Sydney')
-    au_dt = au_tz.normalize(utc_dt.astimezone(au_tz))
-    return au_dt
+#def convert_epoch_to_datetime(timestamp):
+#    """ convert timestamps to Eastern Australian time-zone """
+#    utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+#    au_tz = pytz.timezone('Australia/Sydney')
+#    au_dt = au_tz.normalize(utc_dt.astimezone(au_tz))
+#    return au_dt
+#
+#def timestamp_to_localtime(timestamp, lon, lat):
+#    """ convert timestamps to Eastern Australian time-zone """
+#    utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+#    au_tz = pytz.timezone('Australia/Sydney')
+#    au_dt = au_tz.normalize(utc_dt.astimezone(au_tz))
+#    return localtime
 
 
 def prepare_training_data(data, drop_na=True, combine_labels=True,
