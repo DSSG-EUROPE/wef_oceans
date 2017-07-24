@@ -6,16 +6,16 @@ Documentation of AIS message fields is available here
 https://spire.com/contact/developer-portal/
 """
 
+import os
 import sys
 import psycopg2
 import pandas as pd
-import os
 
 from configparser import ConfigParser
 
-database = os.path.join(os.path.dirname(__file__), 'database.ini')
+database_config = os.path.join(os.path.dirname(__file__), '../auth/database.ini')
 
-def config(filename=database, section='postgresql'):
+def config(filename=database_config, section='postgresql'):
     """ Define parameters for PostgreSQL database connection """
     parser = ConfigParser()
     parser.read(filename)
@@ -41,8 +41,8 @@ def query(sql_query):
         cur.execute(sql_query)
         colnames = [desc[0] for desc in cur.description]
         rows = cur.fetchall()
-        data_frame = pd.DataFrame(rows, columns=colnames)
-        return data_frame
+        data = pd.DataFrame(rows, columns=colnames)
+        return data
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -53,6 +53,5 @@ def query(sql_query):
 
 
 if __name__ == '__main__':
-    data_frame = query(sys.argv[1])
-    print(data_frame)
-    #print(database)
+    data = query(sys.argv[1])
+    print(data)
