@@ -1,0 +1,9 @@
+username=$(whoami)
+# location of code repository "/path/to/repo/"
+export ROOT_FOLDER="/mnt/data/"$username"/"
+# location of data "/path/to/data/"
+export DATA_FOLDER="/mnt/data/shared/"
+# location of model outputs
+export OUTPUT_FOLDER="/mnt/data/"$username"/models/"
+# add lib folder to PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$ROOT_FOLDER/wef_oceans
