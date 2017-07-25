@@ -2,11 +2,14 @@
 functions to convert timestamps to local.
 """
 
-import datetime
-from datetime import datetime, timedelta
+import math
+import ephem
 import pytz
-from tzwhere import tzwhere
+import datetime
+import tzwhere
 
+from datetime import datetime, timedelta
+from tzwhere import tzwhere
 
 def epoch_to_utc_timestamp(epoch):
     """ convert timestamps to UTC timestamps """
@@ -26,12 +29,27 @@ def lon_lat_to_timezone(lon, lat):
     timezone_str = tzwhere.tzNameAt(lon, lat)
     return timezone_str
 
-def utc_timestamp_to_localtime(utc_timestamp, timezone_str):
+def utc_timestamp_to_localtime(utc_timestamp, lon, lat):
     """ convert from utc timestamp to a local timestamp provided the timzeon
     string"""
-    local_timestamp = datetime.utcfromtimestamp(epoch).replace(tzinfo=pytz.utc)
-    utc_timestamp = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
-    au_tz = pytz.timezone('Australia/Sydney')
-    au_dt = au_tz.normalize(utc_dt.astimezone(au_tz))
+    timezone_str = lon_lat_to_timezone(lon,lat)
+    timezone = pytz.timezone(timezone_str)
+    localtime = timezone.normalize(utc_timestamp.astimezone(timezone))
     return localtime
 
+def timestamp_day_or_night(utc_timestamp, lon, lat):
+    """ convert timestamp to day or night 1 or 0 night is sun altitude < 0
+    [https://stackoverflow.com/questions/43299500/
+    pandas-how-to-know-if-its-day-or-night-using-timestamp]
+    """
+    sun = ephem.Sun()
+    observer = ephem.Observer()
+    observer.lon, observer.lat, observer.elevation = lon, lat, 0
+    observer.date = utc_timestamp
+    sun.compute(observer)
+    sun_alt = sun.alt
+    if sun_alt > 0:
+        day = 1
+    else:
+        day = 0
+    return day

@@ -10,7 +10,7 @@ import os
 import pandas as pd
 import cartopy.io.shapereader as shpreader
 
-def distance_to_shore(longitude, latitude, country_name=False):
+def distance_to_shore(lon, lat, country_name=False):
     '''
     This function will create a numpy array of distances
     to shore. It will contain and ID for AIS points and
@@ -75,7 +75,7 @@ def distance_to_shore(longitude, latitude, country_name=False):
         countries = np.hstack([np.repeat(ls[1], len(ls[0])) for ls in coast])
 
         #Load coordinates from ais
-        df = pd.concat([longitude, latitude], axis=1)
+        df = pd.concat([lon, lat], axis=1)
         points = df.as_matrix([df.columns[0:2]])
 
 
@@ -117,9 +117,9 @@ def distance_to_shore(longitude, latitude, country_name=False):
                 np.save(os.path.join('data','coast_coords.npy'),coordinates_proj)
 
         #Load coordinates from ais
-        longitude = longitude
-        latitude = latitude
-        df = pd.concat([longitude, latitude], axis=1)
+        lon = lon
+        lat = lat
+        df = pd.concat([lon, lat], axis=1)
         points = df.as_matrix([df.columns[0:2]])
 
         #Project to meters using 'proj_arr' function and calculate distance
@@ -135,4 +135,4 @@ def distance_to_shore(longitude, latitude, country_name=False):
         return df
 
 
-#def distance_to_port(longitude, latitude, country_name=False):
+#def distance_to_port(lon, lat, country_name=False):
