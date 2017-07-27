@@ -9,6 +9,12 @@ from pyproj import Proj, transform
 import os
 import pandas as pd
 import cartopy.io.shapereader as shpreader
+import ssl
+from os import remove
+from shutil import rmtree
+import urllib.request
+from dbfread import DBF
+import zipfile
 
 def distance_to_shore(lon, lat, country_name=False):
     '''
@@ -135,4 +141,70 @@ def distance_to_shore(lon, lat, country_name=False):
         return df
 
 
-#def distance_to_port(lon, lat, country_name=False):
+def distance_to_port(lon, lat):
+    '''
+    This function will create a numpy array of distances
+    to ports. It will contain and ID for AIS points and
+    the distance to the nearest port point.
+    '''
+
+    def proj_arr(points,proj_to):
+        """
+        Project geographic co-ordinates to get cartesian x,y
+        Transform(origin|destination|lon|lat) to meters.
+        """
+        inproj = Proj(init='epsg:4326')
+        outproj = Proj(init=proj_to)
+        func = lambda x: transform(inproj,outproj,x[0],x[1])
+        return np.array(list(map(func, points)))
+    
+    if not os.path.exists('../../data/ports_coords.npy'):
+            '''
+            Store shp files locally, but do it in a more programatically way)
+            This functions will download medium resolution shapefiles from
+            ports around the world [source US Military]
+            '''
+            # Download the file from `url` and save it locally under `file_name`:
+
+            url = "https://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip"
+            context = ssl._create_unverified_context()
+
+            with urllib.request.urlopen(url, context=context) as response, open('world_port_data.zip', 'wb') as out_file:
+                data = response.read() # a `bytes` object
+                out_file.write(data)
+
+            #Unzip the file and open it
+            zip_ref = zipfile.ZipFile('world_port_data.zip', 'r')
+            zip_ref.extractall('world_port_data')
+            zip_ref.close()
+            
+            ports = DBF("world_port_data/WPI.dbf", load = True)
+            coords = np.asarray([(i['LONGITUDE'], i['LATITUDE']) for i in ports])
+            coords_ = np.save('../../data/ports_coords.npy', coords)
+            remove('world_port_data.zip')
+            rmtree('world_port_data')
+
+    
+    else:
+        #Load coast data
+        print('Loading coordinates (...)')
+        ports = np.load('../../data/ports_coords.npy')
+    
+    #Load coordinates from ais
+    df = pd.concat([lon, lat], axis=1)
+    points = df.as_matrix([df.columns[0:2]])
+    
+    #Project to meters using 'proj_arr' function and calculate distance
+    ports_proj = proj_arr(ports, 'epsg:3410')
+    points_proj = proj_arr(points, 'epsg:3410')
+    distance,index = spatial.cKDTree(ports_proj).query(points_proj)
+    distance_km = distance/1000
+
+
+    #Add new column to input dataframe
+    df = pd.DataFrame({
+        "distance_km" : pd.Series(distance_km)
+        })
+    return df
+
+            
