@@ -79,4 +79,7 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+# pickle files
+*.pkl
+
 **/*.out
