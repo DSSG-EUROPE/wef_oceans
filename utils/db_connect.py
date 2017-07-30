@@ -10,25 +10,33 @@ import os
 import sys
 import psycopg2
 import pandas as pd
+
 from sqlalchemy import *
 from geoalchemy2 import *
+
 from sqlalchemy import func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import *
 
 from configparser import ConfigParser
+from configparser import SafeConfigParser
 
-database_config = os.path.join(os.path.dirname(__file__), '../auth/database.ini')
+config_pscopg2 = os.path.join(os.path.dirname(__file__), '../auth/database_psycopg2.ini')
+config_alchemy = os.path.join(os.path.dirname(__file__), '../auth/database_alchemy.ini')
+
+parser = SafeConfigParser()
+parser.read(config_alchemy)
+url = parser.get('postgresql', 'url')
 
 def alchemy_connect():
     """
     Performs database connection using database settings from settings.py.
     Returns sqlalchemy engine instance
     """
-    return create_engine(URL(**database.DATABASE))
- 
+    return create_engine(url)
 
-def config(filename=database_config, section='postgresql'):
+
+def config(filename=config_pscopg2, section='postgresql'):
     """ Define parameters for PostgreSQL database connection """
     parser = ConfigParser()
     parser.read(filename)
