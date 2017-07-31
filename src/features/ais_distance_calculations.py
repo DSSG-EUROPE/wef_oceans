@@ -158,7 +158,7 @@ def distance_to_port(lon, lat):
         func = lambda x: transform(inproj,outproj,x[0],x[1])
         return np.array(list(map(func, points)))
     
-    if not os.path.exists('../../data/ports_coords.npy'):
+    if not os.path.exists('/mnt/data/shared/ports_coords.npy'):
             '''
             Store shp files locally, but do it in a more programatically way)
             This functions will download medium resolution shapefiles from
@@ -180,7 +180,7 @@ def distance_to_port(lon, lat):
             
             ports = DBF("world_port_data/WPI.dbf", load = True)
             coords = np.asarray([(i['LONGITUDE'], i['LATITUDE']) for i in ports])
-            coords_ = np.save('../../data/ports_coords.npy', coords)
+            coords_ = np.save('/mnt/data/shared/ports_coords.npy', coords)
             remove('world_port_data.zip')
             rmtree('world_port_data')
 
@@ -188,7 +188,7 @@ def distance_to_port(lon, lat):
     else:
         #Load coast data
         print('Loading coordinates (...)')
-        ports = np.load('../../data/ports_coords.npy')
+        ports = np.load('/mnt/data/shared/ports_coords.npy')
     
     #Load coordinates from ais
     df = pd.concat([lon, lat], axis=1)
