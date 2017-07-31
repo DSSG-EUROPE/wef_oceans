@@ -201,7 +201,7 @@ def retrieve_images_marine_areas(list_shapely_geoms):
                 
             except requests.exceptions.RequestException:
                 print("Damn! This server </3. Retry!")
-                 continue
+                continue
                 
             break
     
