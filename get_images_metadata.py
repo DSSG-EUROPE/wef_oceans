@@ -1,6 +1,14 @@
 import pandas as pd
 import geojson, json
+import os
+import numpy as np
+import pandas as pd
+import datetime as dt
+
+import utils
+from utils import db_connect
 from src.sat_imagery import gbdx_intersection as sat
+
 
 '''
 Retrieve data on two AOI's over the oceans: marine areas and oceans
@@ -14,6 +22,10 @@ them to postgresql
 
 # THIS PROCESS TAKE A LOT OF TIME SINCE IS DDOS-ING THE GBDX API. THIS
 # MUST BE RUN ONLY ONCE (IF FILES HAVEN'T BEEN DONWLOADED).
+
+#########################################################################
+######################### PREPARE IMAGE DATA ############################
+#########################################################################
 
 '''
 #Define AOI's from Carto DB 
@@ -51,7 +63,16 @@ data_imgs = pd.read_json(json.dumps(df_imgs))
 data_imgs["timestamp"] = pd.to_datetime(data_imgs["timestamp"])
 data_imgs["date"] = pd.DatetimeIndex(data_imgs["timestamp"]).normalize() #This is not needed, is only to learn how to remove time from timestamps
 data_imgs['year'], data_imgs["day"], data_imgs["month"], data_imgs["hour"], data_imgs["minute"], data_imgs["second"] = data_imgs['timestamp'].dt.year, data_imgs["timestamp"].dt.day, data_imgs["timestamp"].dt.month, data_imgs["timestamp"].dt.hour, data_imgs["timestamp"].dt.minute, data_imgs["timestamp"].dt.second
-data_imgs = data_imgs.drop_duplicates(subset=['catalogID'], keep = False)
+data_imgs = data_imgs.drop_duplicates(subset=['catalogID'], keep = False) 
+
+###############################################################
+###################### OPEN POSTGRESQL CONN ###################
+###############################################################
+
+engine_output = db_connect.alchemy_connect()
+conn_output = engine_output.connect()
+
+data_imgs.to_sql('sat_imagery_data', conn_output, schema='gbdx_metadata', if_exists = 'replace', index =False)
 
 #Save raw data to sql
 data_imgs.head()
