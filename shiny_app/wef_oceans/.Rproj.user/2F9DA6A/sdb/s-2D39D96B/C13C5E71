@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(plyr)\nlibrary(dplyr)\nlibrary(magrittr)\nlibrary(RPostgreSQL)\n#########################################################################\n########################## DATA DUMMY CREATION ##########################\n#########################################################################\nset.seed(1234)\nlatemail <- function(N, st=\"2016/05/01\", et=\"2017/06/15\"){\n  st <- as.POSIXct(as.Date(st, tz = 'GMT'))\n  et <- as.POSIXct(as.Date(et, tz = 'GMT'))\n  dt <- as.numeric(difftime(et,st,unit=\"sec\"))\n  ev <- sort(runif(N, 0, dt))\n  rt <- st + ev\n}\n\ncreate_dummy_ais <- function(number_rows)\ndf_dummy = data.frame(matrix(runif(10000, min=1, max=100), nrow=number_rows, ncol = 4, byrow = T)) %>%\n  set_colnames(c(\"days_fishing\", \"days_tranship\", \"days_eez\", \"num_ais_loss\")) %>%\n  mutate(., lat = runif(number_rows, min=-90, max=90),\n         lon = runif(number_rows, min=-180, max=180),\n         mmsi = runif(number_rows, min=10000000, max = 999999999),\n         timestamp = latemail(number_rows)\n  ) %>%\n  dplyr::select(., mmsi, timestamp, lon, lat, days_fishing, days_tranship, days_eez, num_ais_loss)\n\ndf_dummy <- create_dummy_ais(10000)\nsaveRDS(df_dummy, 'dummy_data.rds')\n\n\n#########################################################################\n############################ BOOTSTRAP POP-UP  ##########################\n#########################################################################\n\n\nhelpPopup <- function(title, content,\n                      placement=c('right', 'top', 'left', 'bottom'),\n                      trigger=c('click', 'hover', 'focus', 'manual')) {\n  tagList(\n    singleton(\n      tags$head(\n        tags$script(\"$(function() { $(\\\"[data-toggle='popover']\\\").popover(); })\")\n      )\n    ),\n    tags$a(\n      href = \"#\", class = \"btn btn-mini\", `data-toggle` = \"popover\",\n      title = title, `data-content` = content, `data-animation` = TRUE,\n      `data-placement` = match.arg(placement, several.ok=TRUE)[1],\n      `data-trigger` = match.arg(trigger, several.ok=TRUE)[1],\n      icon(\"\", lib = \"glyphicon\") \n      \n    )\n  )\n}\n\n\n#########################################################################\n########################## DATA CONNECTION TO  ##########################\n############################# POSTGRESQL ################################\n#########################################################################\n# # create a connection\n# # save the password that we can \"hide\" it as best as we can by collapsing it\n# pw <- {\n#   \"new_user_password\"\n# }\n# \n# drv <- dbDriver(\"PostgreSQL\")\n# # creates a connection to the postgres database\n# # note that \"con\" will be used later in each connection to the database\n# con <- dbConnect(drv, dbname = \"postgres\",\n#                  host = \"localhost\", port = 5432,\n#                  user = \"openpg\", password = pw)\n# rm(pw) # removes the password\n# \n# # check for the cartable\n# dbExistsTable(con, \"cartable\")",
+    "created" : 1501319745034.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4066211250",
+    "id" : "C13C5E71",
+    "lastKnownWriteTime" : 1501435629,
+    "last_content_update" : 1501435629216,
+    "path" : "~/wef_oceans/data/dummy_data.R",
+    "project_path" : "data/dummy_data.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
