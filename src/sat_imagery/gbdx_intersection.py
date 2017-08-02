@@ -1,22 +1,33 @@
+#Load dependencies
+#GBDX
 import gbdxtools
-import numpy as np
-from matplotlib import pyplot as plt
-import shapely as sp
-from shapely.geometry.polygon import LinearRing, Polygon
-from shapely.geometry import mapping, shape
 from gbdx_auth import gbdx_auth
-import geojson, json
+#Geom packages and utilities
+import numpy as np
 from pprint import pprint
 import pandas as pd
 import urllib.request
+from matplotlib import pyplot as plt
+from functools import partial
+import pyproj
+import shapely as sp
+from shapely.ops import transform
+import shapely.wkb
+from shapely.geometry.polygon import LinearRing, Polygon
+from shapely.geometry import mapping, shape
+import geojson, json
 
 #def open_gbdx_connection():
 #Open a session using the Authentication files (~/.gbdx-config)
-#gbdx = gbdx_auth.get_session()
+gbdx = gbdx_auth.get_session()
 gbdx = gbdxtools.Interface()
 
 
 def url_geojson_to_wkt(url):
+    '''
+    This function will create a list of wkt geometries from
+    a geojson stored in an specific URL. 
+    '''
     from pprint import pprint
     from shapely import wkb
     from shapely.ops import unary_union
@@ -35,14 +46,14 @@ def url_geojson_to_wkt(url):
     shapes_wkt = [wkb_to_wkt(x) for x in geoms]
     return shapes_wkt
 
-#oceans = url_geojson_to_wkt("https://observatory.carto.com:443/api/v2/sql?q=select%20*%20from%20observatory.whosonfirst_ocean")
 
 def retrieve_images_oceans(list_shapely_geoms):
     '''
     This function uses query functions from DigitalGlobe to retrieve 
     all the available images in a list of AOI's (shapely objects).
     The function will loop over days of our year of interest if it 
-    exceeds the limit of requests (1000).
+    exceeds the limit of requests (1000). This function is created
+    specifically for oceans data from CartoDB.
     '''
 
     import time
@@ -60,7 +71,7 @@ def retrieve_images_oceans(list_shapely_geoms):
     types = ['DigitalGlobeAcquisition']
     results = []
     n = 0 
-    #gbdx = gbdx_auth.get_session()
+
     gbdx = gbdxtools.Interface()
 
     for e, i in zip(range(len(list_shapely_geoms)), list_shapely_geoms):
@@ -113,13 +124,12 @@ def retrieve_images_oceans(list_shapely_geoms):
     sum([len(i) for i in results])
     concat_result_list = [image for query in results for image in query]
     #Save file - no more requests!
-    with open('/mnt/data/shared/gbdx/results_gbdx_ocean_areas.txt', 'w') as file:
+    with open('/mnt/data/shared/gbdx/results_gbdx_ocean_areas_extend.txt', 'w') as file:
         for item in concat_result_list:
             file.write("%s\n" % item)
         file.close()
     
 
-#marine_areas = url_geojson_to_wkt("https://observatory.carto.com/api/v2/sql?q=select%20*%20from%20observatory.whosonfirst_marinearea")
 
 
 def retrieve_images_marine_areas(list_shapely_geoms):
@@ -127,7 +137,8 @@ def retrieve_images_marine_areas(list_shapely_geoms):
     This function uses query functions from DigitalGlobe to retrieve 
     all the available images in a list of AOI's (shapely objects).
     The function will loop over days of our year of interest if it 
-    exceeds the limit of requests (1000).
+    exceeds the limit of requests (1000). This function in specifically 
+    made to retrieve geometries from marine areas in CartoDB. 
     '''
 
     import time
@@ -212,7 +223,58 @@ def retrieve_images_marine_areas(list_shapely_geoms):
         for item in concat_result_list:
             file.write("%s\n" % item)
         file.close()
+
+def create_dynamic_buffer(geom_wkb, speeds):
+    '''
+    This function will create buffers to every point of the intersection
+    between GBDX and AIS. Since every vessel has different speeds and 
+    locations, this function will try to create different buffers for 
+    different speeds.
+    '''
+
+
+    #Define proj partials
+    project_to_meters = partial(
+                pyproj.transform,
+                    pyproj.Proj(init='epsg:4326'), # source coordinate system
+                        pyproj.Proj(init='epsg:3857')) # destination coordinate system
+
+    project_to_latlon = partial(
+                pyproj.transform,
+                    pyproj.Proj(init='epsg:3857'), # source coordinate system
+                        pyproj.Proj(init='epsg:4326')) # destination coordinate system
+
+    if(speed < 3 and time_difference < 60 ):
+        geom = shapely.wkb.loads(geom_wkb, hex=True)
+        geom_proj = transform(project_to_meters, geom)
+        geom_buffer_meters = geom_proj.buffer(50.0, cap_style=3)
+        geom_buffer_lat_lon = sp.wkt.dumps(transforms(project_to_latlon, geom_buffer_meters))
+        return zip(geom, geom_buffer_lat_lon)
+
+    elif(speed < 10 and time.difference < 60):
+
+
+
+def proccesing_gbdx(image_id, wkt_buffer):
+    #Order image: will retrieve image and move it to another server
+    order = gbdx.Task("Auto_Ordering", cat_id=img_id)
+    order.impersonation_allowed = True
+
+    #Preprocess imagery: [Quick approach]
+    aop = gbdx.Task('AOP_Strip_Processor',
+            data=order.outputs.s3_location.value,
+            bands='Auto',
+            enable_dra=False,
+            enable_pansharpen=False,
+            enable_acomp=False,
+            ortho_epsg='EPSG:4326')
     
-
-
+    #Crop to the point buffer
+    crop = gbdx.Task('CropGeotiff',
+            data=aop.outputs.data.value,
+            wkt_0=wkt, wkt_1=wkt)
+            
+    #Start workflow process
+    wf = gbdx.Workflow([order, aop, crop])
+    
 

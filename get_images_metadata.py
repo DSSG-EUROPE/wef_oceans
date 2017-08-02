@@ -26,20 +26,18 @@ them to postgresql
 #########################################################################
 ######################### PREPARE IMAGE DATA ############################
 #########################################################################
-
 '''
-#Define AOI's from Carto DB 
+Define AOI's from Carto DB 
 marine_areas = url_geojson_to_wkt("https://observatory.carto.com/api/v2/sql?q=select%20*%20from%20observatory.whosonfirst_marinearea")
-oceans = url_geojson_to_wkt("https://observatory.carto.com:443/api/v2/sql?q=select%20*%20from%20observatory.whosonfirst_ocean")
+oceans = sat.url_geojson_to_wkt("https://observatory.carto.com:443/api/v2/sql?q=select%20*%20from%20observatory.whosonfirst_ocean")
 
 aois = list(marine_areas, oceans)
 geoms = map(sat.url_geojson_to_wkt, aois)
 
 #Retrieve images for both areas
 sat.retrieve_images_marine_areas(aois[1])
-sat.retrieve_images_oceans(aois[2])
+sat.retrieve_images_oceans(oceans)
 '''
-
 #Read results
 results_aois=[]
 with open('/mnt/data/shared/gbdx/results_gbdx_marine_areas.txt') as json_file:
@@ -72,14 +70,24 @@ data_imgs = data_imgs.drop_duplicates(subset=['catalogID'], keep = False)
 engine_output = db_connect.alchemy_connect()
 conn_output = engine_output.connect()
 
+###############################################################
+###################### UPLOAD DATA AND RUN  ###################
+###################### INTERSECTION QUERY #####################
+###############################################################
+
+#Upload pandas data.frame to SQL
 data_imgs.to_sql('sat_imagery_data', conn_output, schema='gbdx_metadata', if_exists = 'replace', index =False)
 
-#Save raw data to sql
-data_imgs.head()
-data_imgs.shape
-data_imgs.to_csv("/mnt/data/shared/gbdx/imgs_metadata_complete_aois.csv")
+#Query (Space and time - 120 secs.)
+space_time = '''
+CREATE TABLE gbdx_metadata.overlap_marine_ocean_areas AS
+SELECT *
+FROM ais_messages.full_year_position pts
+INNER JOIN gbdx_metadata.sat_imagery_data pol
+ON (ST_Intersects(pts.geom, pol."footprintWkt")) AND (@EXTRACT(EPOCH from age(pol.timestamps, pts.timestamp)) < 120);
+'''
 
-
+engine_output.execute(space_time)
 
 
 
