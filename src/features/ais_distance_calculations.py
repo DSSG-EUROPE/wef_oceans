@@ -24,10 +24,10 @@ from geopy.distance import great_circle, vincenty
 from math import *
 
 coastline = np.load(os.path.join(os.path.dirname(__file__),
-                    '../data/shape_files/coast_coords_50m.npy'))
+                    '../data/shape_files/coast_coords_50m.npy')
 
 ports = np.load(os.path.join(os.path.dirname(__file__),
-                             '../data/shape_files/ports_coords.npy'))
+                '../data/shape_files/ports_coords.npy'))
 
 def proj_arr(points, proj_to):
     """
@@ -97,23 +97,15 @@ def distance_to_shore(lon, lat):
     to shore. It will contain and ID for AIS points and
     the distance to the nearest coastline point.
     '''
-    coastline_coords = np.vstack([x[0] for x in coastline])
+    coastline_coords = np.vstack([np.flip(x[0], axis=1) for x in coastline])
     countries = np.hstack([np.repeat(str(y[1]), len(y[0])) for y in coastline])
-    coords = pd.concat([lon, lat], axis=1)
-    coords_matrix = coords.as_matrix([coords.columns[0:2]])
-    coast_proj = proj_arr(coastline_coords, 'epsg:3410')
-    coords_proj = proj_arr(coords_matrix, 'epsg:3410')
-    distance, index = spatial.cKDTree(coast_proj).query(coords_proj,
-                                                      distance_upper_bound=2688000)
-    sea = pd.Series(tuple(map(tuple, coords_matrix)), name='sea')
-    land = pd.Series(tuple(map(tuple, coastline_coords[index-1])), name='land')
-    df = pd.concat([sea, land], axis=1)
-    distance = df.apply(lambda x: vincenty(x.sea, x.land).kilometers, axis = 1)
-    df_distance_to_shore = pd.Series(distance, name='distance_to_shore')
-    df_countries = pd.Series(countries[index-1], name='shore_country')
-
+    coords = pd.concat([np.radians(lat), np.radians(lon)], axis=1)
+    tree = BallTree(np.radians(coastline_coords),
+                    metric='haversine')
+    dist, ind = tree.query(coords, k=1)
+    df_distance_to_shore = pd.Series(dist.flatten()*6371, name='distance_to_shore')
+    df_countries = pd.Series(countries[ind].flatten(), name='shore_country')
     return pd.concat([df_distance_to_shore, df_countries], axis=1)
-
 
 def distance_to_port(lon, lat):
     '''
@@ -121,21 +113,12 @@ def distance_to_port(lon, lat):
     It will contain an ID for AIS points and
     the distance to the nearest port point.
     '''
-    #Load coordinates from ais
-    coords = pd.concat([lon, lat], axis=1)
-    coords_matrix = coords.as_matrix([coords.columns[0:2]])
-
-    #Project to meters using 'proj_arr' function and calculate distance
-    ports_proj = proj_arr(ports, 'epsg:3410')
-    coords_proj = proj_arr(coords_matrix, 'epsg:3410')
-    distance, index = spatial.cKDTree(ports_proj).query(coords_proj,
-                                                      distance_upper_bound=2688000)
-    sea = pd.Series(tuple(map(tuple, coords_matrix)), name='sea')
-    port = pd.Series(tuple(map(tuple, ports[index-1])), name='port')
-    df = pd.concat([sea, port], axis=1)
-    distance = df.apply(lambda x: vincenty(x.sea, x.port).kilometers, axis = 1)
-    df_distance_to_port = pd.Series(distance, name='distance_to_port')
-
+    ports_flip = np.flip(ports, axis=1)
+    coords = pd.concat([np.radians(lat), np.radians(lon)], axis=1)
+    tree = BallTree(np.radians(ports_flip),
+                    metric='haversine')
+    dist, ind = tree.query(coords, k=1)
+    df_distance_to_port = pd.Series(dist.flatten()*6371, name='distance_to_port')
     return df_distance_to_port
 
 if __name__ == "__main__":
