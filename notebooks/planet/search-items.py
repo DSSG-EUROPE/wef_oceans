@@ -1,3 +1,4 @@
+import os
 from planet import api
 from planet.api import filters
 import folium
@@ -35,7 +36,7 @@ aoi = {
 
 # will pick up api_key via environment variable PL_API_KEY
 # but can be specified using `api_key` named argument
-client = api.ClientV1(api_key="3a812fd83c894dcfa1c19dd91d972caf")
+client = api.ClientV1(api_key=os.getenv('PLANET_API_KEY'))
 
 date_range_filter = { 
   "type": "DateRangeFilter",
@@ -59,10 +60,9 @@ request = filters.build_search_request(
 )
 
 result = client.quick_search(request)
-
+'''
 torres_strait = folium.Map(location=[142, -9],
                    tiles='Mapbox Bright', zoom_start=2)
-
 folium.GeoJson(aoi, name='geojson').add_to(torres_strait)
 
 imgs = []
@@ -73,3 +73,5 @@ for item in result.items_iter(limit=None):
     print(item), '\n'
 
 torres_strait.save('torres_strait.html')
+'''
+
