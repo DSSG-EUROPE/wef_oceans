@@ -16,38 +16,37 @@ from utils import db_connect
 
 import sklearn
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
+from sklearn.metrics import log_loss
 from sklearn.externals import joblib
 
 import ml_config
 
-features = ml_config.params['features']
-
-engine_input = db_connect.alchemy_connect()
-conn_input = engine_input.connect().execution_options(stream_results=True)
-
-engine_output = db_connect.alchemy_connect()
-conn_output = engine_output.connect()
+#features = ml_config.params['features']
+features = ['distance_from_shore', 'distance_from_port' ,'speed', 'course']
 
 
-df = pd.read_sql_query('SELECT * \
-                        FROM ais_training_data.alex_crowd_sourced_features;', con=conn_input)
+df = db_connect.query('SELECT * FROM ais_training_data.alex_crowd_sourced \
+                        where is_fishing != -1 order by timestamp asc;')
 
-training_data = pd.concat([df[features], df['is_fishing']], axis=1)
 
-X_train, X_test, y_train, y_test = train_test_split(
-    training_data.drop('is_fishing', axis=1), # X
-    training_data['is_fishing'], # y
-    test_size=0.20,
-    stratify=training_data.is_fishing)
+tscv = TimeSeriesSplit(n_splits=5)
 
-model = RandomForestClassifier(n_estimators=450, n_jobs=6)
-model.fit(X_train, y_train)
+X, y = df[features], df['is_fishing']
 
-predictions = pd.Series(model.predict(X_test))
 
-precision_score(y_test, predictions)
-#0.99375462240118329 precision model_1
-
-joblib.dump(model, '../../../models/model_1.pkl')
+for train_index, test_index in tscv.split(X):
+    
+    model = RandomForestClassifier(n_estimators=2000, n_jobs=-1)
+    
+    print(train_index, test_index)
+    X_train, X_test = X.ix[train_index], X.ix[test_index]
+    y_train, y_test = y.ix[train_index], y.ix[test_index]
+    
+    model.fit(X_train, y_train)
+    predictions = model.predict_proba(X_test)
+    predictions_labels = model.predict(X_test)
+    print(precision_score(y_test, predictions_labels))
+    print(log_loss(y_test, predictions))
