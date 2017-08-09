@@ -23,6 +23,16 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import *
 import sys
 
+config_pscopg2 = os.path.join(os.path.dirname(__file__),
+                              '../auth/database_psycopg2.ini')
+
+config_alchemy = os.path.join(os.path.dirname(__file__),
+                              '../auth/database_alchemy.ini')
+
+parser = SafeConfigParser()
+parser.read(config_alchemy)
+url = parser.get('postgresql', 'url')
+    
 def config(filename=config_pscopg2, section='postgresql'):
     """ define parameters for PostgreSQL database connection """
     
@@ -86,15 +96,6 @@ def alchemy_input_output_close(conn_input, conn_output):
     conn_output.close()
 
 if __name__ == '__main__':
-    config_pscopg2 = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_psycopg2.ini')
-
-    config_alchemy = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_alchemy.ini')
-
-    parser = SafeConfigParser()
-    parser.read(config_alchemy)
-    url = parser.get('postgresql', 'url')
     
     # run queries from command line taking query as argument
     data = query(sys.argv[1])
