@@ -224,7 +224,7 @@ def retrieve_images_marine_areas(list_shapely_geoms):
             file.write("%s\n" % item)
         file.close()
 
-def create_buffers_points(geom_wkb):
+def create_buffers_points(geom_wkb, size, proj=False):
    
     #Define proj partials
     project_to_meters = partial(
@@ -240,10 +240,12 @@ def create_buffers_points(geom_wkb):
 
     geom = shapely.wkb.loads(geom_wkb, hex = True)
     geom_proj = transform(project_to_meters, geom)
-    geom_buffer_meters  = geom_proj.buffer(800, cap_style=3)
+    geom_buffer_meters  = geom_proj.buffer(size, cap_style=3)
     geom_buffer_lat_lon = sp.wkt.dumps(transform(project_to_latlon, geom_buffer_meters))
-    return geom_buffer_lat_lon
-
+    if proj==False:
+        return geom_buffer_lat_lon
+    else:
+        return geom_buffer_meters
 
 def processing_gbdx(img_id, wkt_buffer):
     #Order image: will retrieve image and move it to another server
