@@ -12,39 +12,24 @@ the following initialisation files:
 Documentation of AIS message fields is available here
 https://spire.com/contact/developer-portal/
 """
-
+from configparser import ConfigParser, SafeConfigParser
+from geoalchemy2 import *
 import os
-import sys
-
+import pandas as pd
 import psycopg2
 import sqlalchemy
-import pandas as pd
-
-from geoalchemy2 import *
-
 from sqlalchemy import *
-from sqlalchemy import func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import *
-
-from configparser import ConfigParser, SafeConfigParser
-
-config_pscopg2 = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_psycopg2.ini')
-
-config_alchemy = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_alchemy.ini')
-
-parser = SafeConfigParser()
-parser.read(config_alchemy)
-url = parser.get('postgresql', 'url')
-
+import sys
 
 def config(filename=config_pscopg2, section='postgresql'):
     """ define parameters for PostgreSQL database connection """
+    
     parser = ConfigParser()
     parser.read(filename)
     database = {}
+    
     if parser.has_section(section):
         params = parser.items(section)
         for param in params:
@@ -52,12 +37,14 @@ def config(filename=config_pscopg2, section='postgresql'):
     else:
         raise Exception(
             'Section {0} not found in the {1} file'.format(section, filename))
+        
     return database
-
 
 def query(sql_query):
     """ connect to PostgreSQL database server with psycopg2 and run query """
+    
     conn = None
+    
     try:
         params = config()
         conn = psycopg2.connect(**params)
@@ -66,8 +53,8 @@ def query(sql_query):
         colnames = [desc[0] for desc in cur.description]
         rows = cur.fetchall()
         data = pd.DataFrame(rows, columns=colnames)
-        return data
         cur.close()
+        return data
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
@@ -91,15 +78,24 @@ def alchemy_input_output_connect():
     engine_output = alchemy_connect()
     conn_output = engine_output.connect()
 
-def alchemy_input_output_close():
+def alchemy_input_output_close(conn_input, conn_output):
     """
     close input and output connections from sqlalchemy.
     """
     conn_input.close()
     conn_output.close()
 
-
 if __name__ == '__main__':
+    config_pscopg2 = os.path.join(os.path.dirname(__file__),
+                              '../auth/database_psycopg2.ini')
+
+    config_alchemy = os.path.join(os.path.dirname(__file__),
+                              '../auth/database_alchemy.ini')
+
+    parser = SafeConfigParser()
+    parser.read(config_alchemy)
+    url = parser.get('postgresql', 'url')
+    
     # run queries from command line taking query as argument
     data = query(sys.argv[1])
     print(data)
