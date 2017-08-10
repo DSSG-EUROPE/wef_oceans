@@ -1,6 +1,6 @@
 """
 Functions for accessing the PostgreSQL database for this project. In this way
-AIS data, modelling features, and predictions can be accessed, along with 
+AIS data, modelling features, and predictions can be accessed, along with
 satellite image meta-data.
 
 Database connections use either psycopg2 or sqlalchemy packages, and require
@@ -32,14 +32,14 @@ config_alchemy = os.path.join(os.path.dirname(__file__),
 parser = SafeConfigParser()
 parser.read(config_alchemy)
 url = parser.get('postgresql', 'url')
-    
+
 def config(filename=config_pscopg2, section='postgresql'):
     """ define parameters for PostgreSQL database connection """
-    
+
     parser = ConfigParser()
     parser.read(filename)
     database = {}
-    
+
     if parser.has_section(section):
         params = parser.items(section)
         for param in params:
@@ -47,14 +47,14 @@ def config(filename=config_pscopg2, section='postgresql'):
     else:
         raise Exception(
             'Section {0} not found in the {1} file'.format(section, filename))
-        
+
     return database
 
 def query(sql_query):
     """ connect to PostgreSQL database server with psycopg2 and run query """
-    
+
     conn = None
-    
+
     try:
         params = config()
         conn = psycopg2.connect(**params)
@@ -96,7 +96,7 @@ def alchemy_input_output_close(conn_input, conn_output):
     conn_output.close()
 
 if __name__ == '__main__':
-    
+
     # run queries from command line taking query as argument
     data = query(sys.argv[1])
     print(data)
