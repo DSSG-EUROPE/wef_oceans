@@ -6,16 +6,11 @@ to timestamps and calculate day or night binary.
 import math
 import ephem
 import pytz
-import datetime
-#import tzwhere
 
-import utils
-from utils import db_connect
+import datetime
+from datetime import datetime, timedelta
 
 from timezonefinder import TimezoneFinder
-
-from datetime import datetime, timedelta
-#from tzwhere import tzwhere
 
 tf = TimezoneFinder()
 
@@ -39,16 +34,16 @@ def lon_lat_to_timezone(lon, lat):
     return timezone_str
 
 def utc_timestamp_to_localtime(utc_timestamp, lon, lat):
-    """ convert from utc timestamp to a local timestamp provided the timezone
-    string, only available on land"""
+    """ convert from utc timestamp to a local timestamp provided the
+    timezone string, only available on land"""
     timezone_str = lon_lat_to_timezone(lon,lat)
     timezone = pytz.timezone(timezone_str)
     localtime = timezone.normalize(utc_timestamp.astimezone(timezone))
     return localtime
 
 def epoch_to_localtime(epoch, lon, lat):
-    """ convert from utc timestamp to a local timestamp provided the timezone
-    string, only available on land"""
+    """ convert from utc timestamp to a local timestamp provided the
+    timezone string, only available on land"""
     utc_timestamp = epoch_to_utc_timestamp(epoch)
     timezone_str = lon_lat_to_timezone(lon,lat)
     timezone = pytz.timezone(timezone_str)
@@ -57,8 +52,6 @@ def epoch_to_localtime(epoch, lon, lat):
 
 def sun_altitude(utc_time, lon, lat, epoch=False):
     """ calculate angle of the sun at a lon lat for a certain time
-    [https://stackoverflow.com/questions/43299500/
-    pandas-how-to-know-if-its-day-or-night-using-timestamp]
     assumes an elevation of 0 m or sea-level
     """
     if epoch == True:
