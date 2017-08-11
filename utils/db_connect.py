@@ -77,7 +77,7 @@ def alchemy_connect():
     """
     return create_engine(url)
 
-def alchemy_input_output_connect():
+def alchemy_input_output_open():
     """
     create input and output engines, to stream to and from the PostgreSQL
     database in parallel. Stream results for faster downstream connection.
@@ -87,6 +87,7 @@ def alchemy_input_output_connect():
 
     engine_output = alchemy_connect()
     conn_output = engine_output.connect()
+    return conn_input, conn_output
 
 def alchemy_input_output_close(conn_input, conn_output):
     """
