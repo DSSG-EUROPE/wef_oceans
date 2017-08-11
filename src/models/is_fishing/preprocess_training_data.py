@@ -66,14 +66,16 @@ def preprocess_test_data(chunk):
                    'in_eez', 'distance_to_port']]
     return chunk
 
-if __name__ == '__main__':
+def main():
+    #preprocess training
     table_read = "SELECT * FROM ais_is_fishing_model.training_data;"
     db_manipulate.loop_chunks(table_read,
                                preprocess_training_data,
                                'ais_is_fishing_model',
-                               'ais_training_data_features',
+                               'training_data_features',
                                parallel=True)
 
+    #preprocess test
     table_read = "SELECT * FROM ais_messages.full_year_position;"
     db_manipulate.loop_chunks(table_read,
                               preprocess_test_data,
@@ -82,8 +84,12 @@ if __name__ == '__main__':
                               1000000,
                               parallel=True)
 
+    # add time features in sql and rename columns
     add_time_features = os.path.join(os.path.dirname(__file__),
                                      '../../../sql_scripts/\
                                       is_fishing_model_time_features.sql',
                                       'r')
     db_connect.query(add_time_features)
+
+if __name__ == '__main__':
+    main()
