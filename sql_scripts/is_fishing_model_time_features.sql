@@ -14,3 +14,7 @@ ALTER TABLE ais_is_fishing_model.test_data_features ADD month int8;
 UPDATE ais_is_fishing_model.test_data_features SET month = date_part('month', timestamp);
 ALTER TABLE ais_is_fishing_model.test_data_features ADD day_of_week int8;
 UPDATE ais_is_fishing_model.test_data_features SET day_of_week = date_part('dow', timestamp);
+
+-- change lon, lat to longitude and latitude so train and test have same feature names
+ALTER TABLE ais_is_fishing_model.training_data_features RENAME COLUMN lat TO latitude ;
+ALTER TABLE ais_is_fishing_model.training_data_features RENAME COLUMN lon TO longitude ;_
