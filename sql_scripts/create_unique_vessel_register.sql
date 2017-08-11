@@ -30,10 +30,3 @@ ON unique_vessel.aggregated_register (mmsi);
 select COUNT(distinct mmsi) from unique_vessel.aggregated_register;
 
 select COUNT(distinct mmsi) from ais_messages.full_year_static;
-
-
-
-
-
-
-
