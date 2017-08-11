@@ -71,7 +71,7 @@ if __name__ == '__main__':
     #db_manipulate.loop_chunks(table_read,
     #                           preprocess_training_data,
     #                           'ais_training_data',
-    #                           'alex_crowd_sourced_features_2',
+    #                           'alex_crowd_sourced_features',
     #                           parallel=True)
 
     #table_read = "SELECT * FROM ais_messages.full_year_position;"
@@ -79,5 +79,5 @@ if __name__ == '__main__':
     #                          preprocess_test_data,
     #                          'ais_features',
     #                          'full_year_position',
-    #                          30000000,
+    #                          1000000,
     #                          parallel=True)
