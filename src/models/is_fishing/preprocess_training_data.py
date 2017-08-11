@@ -67,17 +67,23 @@ def preprocess_test_data(chunk):
     return chunk
 
 if __name__ == '__main__':
-    #table_read = "SELECT * FROM ais_training_data.alex_crowd_sourced;"
-    #db_manipulate.loop_chunks(table_read,
-    #                           preprocess_training_data,
-    #                           'ais_training_data',
-    #                           'alex_crowd_sourced_features',
-    #                           parallel=True)
+    table_read = "SELECT * FROM ais_is_fishing_model.training_data;"
+    db_manipulate.loop_chunks(table_read,
+                               preprocess_training_data,
+                               'ais_is_fishing_model',
+                               'ais_training_data_features',
+                               parallel=True)
 
-    #table_read = "SELECT * FROM ais_messages.full_year_position;"
-    #db_manipulate.loop_chunks(table_read,
-    #                          preprocess_test_data,
-    #                          'ais_features',
-    #                          'full_year_position',
-    #                          1000000,
-    #                          parallel=True)
+    table_read = "SELECT * FROM ais_messages.full_year_position;"
+    db_manipulate.loop_chunks(table_read,
+                              preprocess_test_data,
+                              'ais_is_fishing_model',
+                              'test_data_features',
+                              1000000,
+                              parallel=True)
+
+    add_time_features = os.path.join(os.path.dirname(__file__),
+                                     '../../../sql_scripts/\
+                                      is_fishing_model_time_features.sql',
+                                      'r')
+    db_connect.query(add_time_features)
