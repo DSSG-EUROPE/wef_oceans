@@ -20,12 +20,12 @@ def proj_arr(points, proj_to, proj_from='epsg:4326'):
     """
     Project geographic co-ordinates to get cartesian x,y
     transform(origin|destination|lon|lat) to meters.
-    
+
     Arguments:
     points (array-like?): Geographic coordinates in input projection
     proj_from (string): Input projection (default 'epsg:4326')
     proj_to (string): Desired projection (e.g. 'epsg:3410')
-    
+
     Returns:
     Numpy array of coordinates in Cartesian X,Y
     """
@@ -36,14 +36,14 @@ def proj_arr(points, proj_to, proj_from='epsg:4326'):
 
 def extract_coords_and_country(country):
     '''
-    Extract an array of shoreline coordinates for a given country from 
-    Natural Earth shape file multipolygons. 
-    
-    Arguments: 
+    Extract an array of shoreline coordinates for a given country from
+    Natural Earth shape file multipolygons.
+
+    Arguments:
     country (string)
-    
+
     Returns:
-    List of tuples (lat/long pairs) of coordinates, with country name as 
+    List of tuples (lat/long pairs) of coordinates, with country name as
     the last element
     '''
     geoms = country.geometry
@@ -57,7 +57,7 @@ def extract_coords_and_country(country):
 def save_coastline_shape_file():
     '''
     Download a shape file from Natural Earth of coastlines
-    with cultural (national) boundaries, at 10m resolution. The 
+    with cultural (national) boundaries, at 10m resolution. The
     shape file is then stored locally.
     '''
     ne_earth = shpreader.natural_earth(resolution='10m',
@@ -96,18 +96,18 @@ def save_ports_shape_file():
 
 def distance_to_shore(lon, lat):
     '''
-    Take longitude and latitude and return the distance (km) to the 
-    closest point on land, as well as the country of that land mass. 
-    This uses a ball tree search approach in radians, accounting for the curvature 
-    of the Earth by calculating the Haversine metric for each pair of points. 
-    Note that Haversine distance metric expects coordinate pairs in
-    (lat, long) order, in radians.
-    
+    Take longitude and latitude and return the distance (km) to the
+    closest point on land, as well as the country of that land mass.
+    This uses a ball tree search approach in radians, accounting for the
+    curvature of the Earth by calculating the Haversine metric for each pair
+    of points. Note that Haversine distance metric expects coordinate
+    pairs in (lat, long) order, in radians.
+
     Arguments:
     lon, lat: Arrays of longitude-latitude pairs of ship locations, in degrees
-    
+
     Returns:
-    Pandas dataframe with columns 'shore_country' and 'distance_to_shore' 
+    Pandas dataframe with columns 'shore_country' and 'distance_to_shore'
     '''
     coords = pd.concat([np.radians(lat), np.radians(lon)], axis=1)
     countries = np.hstack([np.repeat(str(x[1]), len(x[0][0])) for x in coastline])
@@ -121,16 +121,17 @@ def distance_to_shore(lon, lat):
 
 def distance_to_port(lon, lat):
     '''
-    Take longitude and latitude and return the distance (km) to the 
-    closest port, as well as the country of that port, using the World PortIndex
-    database. This uses a ball tree search approach in radians, accounting for 
-    the curvature of the Earth by calculating the Haversine metric for each pair 
-    of points. Note that Haversine distance metric expects coordinate pairs in
-    (lat, long) order, in radians.
-    
+    Take longitude and latitude and return the distance (km) to the
+    closest port, as well as the country of that port, using the World
+    Port Index database. This uses a ball tree search approach in
+    radians, accounting for the curvature of the Earth by calculating
+    the Haversine metric for each pair of points. Note that Haversine
+    distance metric expects coordinate pairs in (lat, long) order,
+    in radians.
+
     Arguments:
     lon, lat: Arrays of longitude-latitude pairs of ship locations, in degrees
-    
+
     Returns:
     Pandas dataframe with columns 'shore_country' and 'distance_to_port'
     '''
@@ -139,7 +140,7 @@ def distance_to_port(lon, lat):
     tree = BallTree(np.radians(ports_flip), metric='haversine')
     dist, ind = tree.query(coords, k=1)
     df_distance_to_port = pd.Series(dist.flatten()*6371, # radius of earth (km)
-				    name='distance_to_port')
+                                    name='distance_to_port')
     return df_distance_to_port
 
 if __name__ == "__main__":
