@@ -28,8 +28,10 @@ def preprocess_training_data(chunk):
     chunk['utc_timestamp'] = chunk.apply(
         lambda x: epoch_to_utc_timestamp(x.timestamp), axis = 1)
     chunk['sun_height'] = chunk.apply(
-        lambda x: sun_altitude(x.timestamp, x.lon, x.lat, epoch=True), axis = 1)
-    chunk['day'] = chunk.apply(lambda x: day_or_night(x.sun_height), axis = 1)
+        lambda x: sun_altitude(x.timestamp, x.lon, x.lat, epoch=True),
+                               axis = 1)
+    chunk['day_or_night'] = chunk.apply(lambda x: day_or_night(x.sun_height),
+                                        axis = 1)
     df = distance_to_shore(chunk.lon, chunk.lat)
     df.reset_index(drop=True, inplace=True)
     chunk.reset_index(drop=True, inplace=True)
@@ -52,7 +54,7 @@ def preprocess_test_data(chunk):
     """
     chunk['sun_height'] = chunk.apply(
         lambda x: sun_altitude(x.timestamp, x.longitude, x.latitude), axis = 1)
-    chunk['day'] = chunk.apply(
+    chunk['day_or_night'] = chunk.apply(
         lambda x: day_or_night(x.sun_height), axis = 1)
     df = distance_to_shore(chunk.longitude, chunk.latitude)
     df.reset_index(drop=True, inplace=True)
@@ -62,8 +64,8 @@ def preprocess_test_data(chunk):
         chunk.longitude, chunk.latitude)
     chunk['in_eez'] = np.where(chunk['distance_to_shore']<=370, 1, 0)
     chunk = chunk[['mmsi','timestamp','longitude','latitude', 'speed', 'course',
-                   'sun_height', 'day', 'distance_to_shore', 'shore_country',
-                   'in_eez', 'distance_to_port']]
+                   'sun_height', 'day_or_night', 'distance_to_shore',
+                   'shore_country', 'in_eez', 'distance_to_port']]
     return chunk
 
 def main():
