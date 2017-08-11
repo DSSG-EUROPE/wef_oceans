@@ -24,15 +24,12 @@ import ml_config
 
 features = ml_config.params['features']
 
-engine_input = db_connect.alchemy_connect()
-conn_input = engine_input.connect().execution_options(stream_results=True)
-
-engine_output = db_connect.alchemy_connect()
-conn_output = engine_output.connect()
-
+conn_input, conn_output = alchemy_input_output_open()
 
 df = pd.read_sql_query('SELECT * \
                         FROM ais_training_data.alex_crowd_sourced_features;', con=conn_input)
+
+alchemy_input_output_close(conn_input, conn_output)
 
 training_data = pd.concat([df[features], df['is_fishing']], axis=1)
 
