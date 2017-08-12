@@ -10,35 +10,34 @@ import sklearn
 from sklearn.externals import joblib
 
 import utils
-from utils import db_connect
+from utils import db_connect, db_manipulate
 
 import src
-import ml_config
+import config
+import itertools
+import preprocess_data
 
-engine_input = db_connect.alchemy_connect()
-conn_input = engine_input.connect().execution_options(stream_results=True)
 
-engine_output = db_connect.alchemy_connect()
-conn_output = engine_output.connect()
 
-model = joblib.load('../../../models/model_1.pkl')
+table_read = "SELECT " + ", ".join(features) + " " + \
+             "FROM ais_is_fishing_model.test_data_features;"
 
-features = ml_config.params['features']
+features = list(itertools.chain.from_iterable(config.features.values()))
 
-query_read = "SELECT * \
-              FROM ais_features.full_year_positional;"
+def predict_chunk(chunk):
+    predictions = pd.DataFrame(model.predict_proba(chunk),
+                               columns=['is_fishing', 'is_not_fishing'])
+    chunk.reset_index(drop=True, inplace=True)
+    predictions.reset_index(drop=True, inplace=True)
+    chunk = pd.concat([chunk, predictions], axis=1)
+    return chunk
 
-start = dt.datetime.now()
-size_chunk = 10000
-j = 0
 
-for chunk in pd.read_sql_query(query_read, conn_input, chunksize=size_chunk):
-    chunk = chunk.rename(columns = {'distance_to_shore':'distance_from_shore', 'distance_to_port':'distance_from_port'})
-    chunk_features = chunk[features]
-    predictions = pd.Series(model.predict(chunk_features), name = 'is_fishing')
-    chunk = pd.concat([chunk[['mmsi', 'timestamp']], predictions], axis=1)
-    chunk.to_sql('ais_predictions', conn_output, schema='ais_modelling',
-                 if_exists= 'append', index=False)
-    j+=1
-    print('{} seconds: completed {} rows'.format(
-        (dt.datetime.now() - start).seconds, j*size_chunk))
+def main():
+    model = joblib.load('../../../models/model_1.pkl')
+    db_manipulate.loop_chunks(table_read,
+                               predict_chunk,
+                               'ais_is_fishing_model',
+                               'predictions',
+                               100000,
+                               parallel=True)
