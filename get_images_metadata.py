@@ -1,6 +1,7 @@
 import pandas as pd
 import geojson, json
 from src.sat_imagery import gbdx_intersection as sat
+
 from utils
 from utils import db_connect
 '''
@@ -24,8 +25,8 @@ aois = list(marine_areas, oceans)
 geoms = map(sat.url_geojson_to_wkt, aois)
 
 #Retrieve images for both areas
-sat.retrieve_images_marine_areas(aois[1])
-sat.retrieve_images_oceans(aois[2])
+sat.retrieve_images_marine_areas(aois[0])
+sat.retrieve_images_oceans(aois[1])
 
 #Read results
 results_aois=[]

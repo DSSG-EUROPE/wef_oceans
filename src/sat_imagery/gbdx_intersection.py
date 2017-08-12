@@ -272,4 +272,16 @@ def processing_gbdx(img_id, wkt_buffer):
     wf.execute()
     return wf
 
+def json_to_wkt(geojson_obj):
+    string = json.dumps(geojson_obj)
+    geoj = geojson.loads(string)
+    geoj_sp = shape(geoj)
+    return geoj_sp.wkt
+
+def wkt_to_json(wkt_string):
+    geom_sp = sp.wkt.loads(wkt_string)
+    geo_json = geojson.Feature(geometry=geom_sp, properties={})
+    return geo_json.geometry
+
+
 
