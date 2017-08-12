@@ -12,9 +12,23 @@ Notes:
 import numpy as np
 import pandas as pd
 
+from sklearn.preprocessing import LabelEncoder
+from collections import defaultdict
+
 from utils import db_manipulate
 from src.features.ais_distance_calculations import distance_to_port, distance_to_shore
 from src.features.ais_time_calculations import  epoch_to_utc_timestamp, sun_altitude, day_or_night, epoch_to_localtime
+
+def label_encode_data(df):
+    d = defaultdict(LabelEncoder)
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    encode_cols = df.select_dtypes(exclude=numerics).columns
+    try:
+        df[encode_cols] = df[encode_cols].apply(
+                                          lambda x: d[x.name].fit_transform(x))
+        return encode_cols, df
+    except ValueError:
+        print("Columns are numeric, label encoding not required")
 
 def preprocess_training_data(chunk):
     """

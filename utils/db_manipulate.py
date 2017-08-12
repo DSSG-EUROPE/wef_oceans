@@ -39,7 +39,7 @@ def parallelise_dataframe(df, func, num_cores=None):
     return df
 
 def loop_chunks(table_read, chunk_function, output_schema, output_table,
-                size_chunk=10000000, parallel=True):
+                size_chunk=1000000, parallel=True):
     '''
     Perform function on PostgreSQL database chunk. Read from the db
     perform operation either threaded or on a single core, then
