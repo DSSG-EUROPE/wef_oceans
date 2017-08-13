@@ -67,4 +67,5 @@ def loop_chunks(table_read, chunk_function, output_schema, output_table,
         j+=1
         print('{} seconds: completed {} rows'.format(
             (round(time.time()) - start), j*size_chunk))
+
     db_connect.alchemy_input_output_close(conn_input, conn_output)

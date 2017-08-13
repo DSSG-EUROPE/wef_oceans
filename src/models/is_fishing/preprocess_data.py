@@ -9,6 +9,7 @@ Notes:
 
 """
 
+import os
 import numpy as np
 import pandas as pd
 
@@ -18,6 +19,8 @@ from collections import defaultdict
 from utils import db_manipulate
 from src.features.ais_distance_calculations import distance_to_port, distance_to_shore
 from src.features.ais_time_calculations import  epoch_to_utc_timestamp, sun_altitude, day_or_night, epoch_to_localtime
+
+import config
 
 def label_encode_data(df):
     d = defaultdict(LabelEncoder)
@@ -47,9 +50,9 @@ def preprocess_training_data(chunk):
     chunk['day_or_night'] = chunk.apply(lambda x: day_or_night(x.sun_height),
                                         axis = 1)
     df = distance_to_shore(chunk.lon, chunk.lat)
-    df.reset_index(drop=True, inplace=True)
-    chunk.reset_index(drop=True, inplace=True)
-    chunk = pd.concat([chunk, df], axis=1)
+    chunk = pd.concat([chunk.reset_index(drop=True, inplace=True),
+                       df.reset_index(drop=True, inplace=True)],
+                       axis=1)
     chunk['distance_to_port'] = distance_to_port(chunk.lon, chunk.lat)
     chunk['in_eez'] = np.where(chunk['distance_to_shore']<=370, 1, 0)
     chunk.dropna(how='any', inplace=True)
@@ -71,9 +74,9 @@ def preprocess_test_data(chunk):
     chunk['day_or_night'] = chunk.apply(
         lambda x: day_or_night(x.sun_height), axis = 1)
     df = distance_to_shore(chunk.longitude, chunk.latitude)
-    df.reset_index(drop=True, inplace=True)
-    chunk.reset_index(drop=True, inplace=True)
-    chunk = pd.concat([chunk, df], axis=1)
+    chunk = pd.concat([chunk.reset_index(drop=True, inplace=True),
+                       df.reset_index(drop=True, inplace=True)],
+                       axis=1)
     chunk['distance_to_port'] = distance_to_port(
         chunk.longitude, chunk.latitude)
     chunk['in_eez'] = np.where(chunk['distance_to_shore']<=370, 1, 0)
@@ -83,8 +86,12 @@ def preprocess_test_data(chunk):
     return chunk
 
 def main():
+    features = list(itertools.chain.from_iterable(config.features.values()))
+
     #preprocess training
-    table_read = "SELECT * FROM ais_is_fishing_model.training_data;"
+    table_read = "SELECT " + ", ".join(features) + " " + \
+                 "FROM ais_is_fishing_model.training_data;"
+
     db_manipulate.loop_chunks(table_read,
                                preprocess_training_data,
                                'ais_is_fishing_model',
@@ -92,7 +99,9 @@ def main():
                                parallel=True)
 
     #preprocess test
-    table_read = "SELECT * FROM ais_messages.full_year_position;"
+    table_read = "SELECT " + ", ".join(features) + " " + \
+                 "FROM ais_messages.full_year_position;"
+
     db_manipulate.loop_chunks(table_read,
                               preprocess_test_data,
                               'ais_is_fishing_model',
