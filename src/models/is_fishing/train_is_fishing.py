@@ -18,8 +18,10 @@ import sklearn
 import itertools
 
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
+from sklearn.metrics import log_loss
 from sklearn.externals import joblib
 
 import config
@@ -33,7 +35,6 @@ def get_training_data():
     db_connect.alchemy_input_output_close(conn_input, conn_output)
     df = pd.concat([df[features], df['is_fishing']], axis=1)
     return df
-
 
 df = get_training_data(all_features)
 
