@@ -1,4 +1,6 @@
 ## Don't save credentials
+*db_credentials
+**/dbcreds.py
 **/dbcreds.py
 **/dbcreds.pyc
 *.ini
