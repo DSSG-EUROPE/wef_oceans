@@ -1,5 +1,4 @@
-"""
-models to predict whether a vessel is fishing or not for a given time point.
+""" models to predict whether a vessel is fishing or not for a given time point.
 Labelled data was provided by Kristina Boerder at Dalhousie University.
 The data has AIS messages and labels for whether the ship was fishing or not
 and the type of fishing gear used.
@@ -15,37 +14,41 @@ import utils
 from utils import db_connect
 
 import sklearn
+
+import itertools
+
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
+from sklearn.metrics import log_loss
 from sklearn.externals import joblib
 
-import ml_config
+import config
 
-features = ml_config.params['features']
+def get_training_data():
+    features = list(itertools.chain.from_iterable(config.features.values()))
+    table_read = "SELECT " + ", ".join(features) + ", is_fishing " + \
+                 "FROM ais_is_fishing_model.training_data_features;"
+    conn_input, conn_output = db_connect.alchemy_input_output_open()
+    df = pd.read_sql_query(table_read, con=conn_input)
+    db_connect.alchemy_input_output_close(conn_input, conn_output)
+    df = pd.concat([df[features], df['is_fishing']], axis=1)
+    return df
 
-engine_input = db_connect.alchemy_connect()
-conn_input = engine_input.connect().execution_options(stream_results=True)
-
-engine_output = db_connect.alchemy_connect()
-conn_output = engine_output.connect()
-
-
-df = pd.read_sql_query('SELECT * \
-                        FROM ais_training_data.alex_crowd_sourced_features;', con=conn_input)
-
-training_data = pd.concat([df[features], df['is_fishing']], axis=1)
+df = get_training_data(all_features)
 
 X_train, X_test, y_train, y_test = train_test_split(
-    training_data.drop('is_fishing', axis=1), # X
-    training_data['is_fishing'], # y
+    df.drop('is_fishing', axis=1), # X
+    df['is_fishing'], # y
     test_size=0.20,
-    stratify=training_data.is_fishing)
+    stratify=df.is_fishing)
 
-model = RandomForestClassifier(n_estimators=450, n_jobs=6)
+model = RandomForestClassifier(n_estimators=450, n_jobs=-1)
 model.fit(X_train, y_train)
 
-predictions = pd.Series(model.predict(X_test))
+predictions = pd.Series(model.predict_proba(X_test)[:,1],
+                        name = 'is_fishing')
 
 precision_score(y_test, predictions)
 #0.99375462240118329 precision model_1
