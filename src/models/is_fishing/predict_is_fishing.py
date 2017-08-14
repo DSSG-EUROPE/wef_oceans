@@ -19,9 +19,12 @@ import itertools
 import preprocess_data
 
 def predict_chunk(chunk):
+    features = list(itertools.chain.from_iterable(config.features.values()))
+
     model = joblib.load(os.path.join(os.path.dirname(__file__),
                                      '../../../models/model_1.pkl'))
-    predictions = pd.Series(model.predict_proba(chunk)[:,1],
+    chunk_features = chunk[features]
+    predictions = pd.Series(model.predict_proba(chunk_features)[:,1],
                             name = 'is_fishing')
     chunk.reset_index(drop=True, inplace=True)
     predictions.reset_index(drop=True, inplace=True)
@@ -29,16 +32,15 @@ def predict_chunk(chunk):
     return chunk
 
 def main():
-    features = list(itertools.chain.from_iterable(config.features.values()))
 
-    table_read = "SELECT " + ", ".join(features) + " " + \
-                 "FROM ais_is_fishing_model.test_data_features;"
+    table_read = "SELECT * \
+                  FROM ais_is_fishing_model.test_data_features;"
 
     db_manipulate.loop_chunks(table_read,
                                predict_chunk,
                                'ais_is_fishing_model',
                                'test_data_predictions',
-                               1000,
+                               10000,
                                parallel=True)
 
 if __name__ == '__main__':
