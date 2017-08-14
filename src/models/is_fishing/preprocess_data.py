@@ -50,9 +50,9 @@ def preprocess_training_data(chunk):
     chunk['day_or_night'] = chunk.apply(lambda x: day_or_night(x.sun_height),
                                         axis = 1)
     df = distance_to_shore(chunk.lon, chunk.lat)
-    chunk = pd.concat([chunk.reset_index(drop=True, inplace=True),
-                       df.reset_index(drop=True, inplace=True)],
-                       axis=1)
+    chunk.reset_index(drop=True, inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    chunk = pd.concat([chunk, df], axis=1)
     chunk['distance_to_port'] = distance_to_port(chunk.lon, chunk.lat)
     chunk['in_eez'] = np.where(chunk['distance_to_shore']<=370, 1, 0)
     chunk.dropna(how='any', inplace=True)
@@ -74,9 +74,8 @@ def preprocess_test_data(chunk):
     chunk['day_or_night'] = chunk.apply(
         lambda x: day_or_night(x.sun_height), axis = 1)
     df = distance_to_shore(chunk.longitude, chunk.latitude)
-    chunk = pd.concat([chunk.reset_index(drop=True, inplace=True),
-                       df.reset_index(drop=True, inplace=True)],
-                       axis=1)
+    chunk.reset_index(drop=True, inplace=True)
+    chunk = pd.concat([chunk, df.reset_index(drop=True, inplace=True)], axis=1)
     chunk['distance_to_port'] = distance_to_port(
         chunk.longitude, chunk.latitude)
     chunk['in_eez'] = np.where(chunk['distance_to_shore']<=370, 1, 0)
