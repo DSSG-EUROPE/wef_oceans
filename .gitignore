@@ -5,6 +5,7 @@
 
 #Python file with auth dict
 database.py 
+db_credentials
 
 ## Don't save png or temp files
 **/*.png
@@ -84,5 +85,4 @@ target/
 
 # numpy files
 *.npy
-
 **/*.out
