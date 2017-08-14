@@ -1,10 +1,13 @@
 ## Don't save credentials
+*db_credentials
+**/dbcreds.py
 **/dbcreds.py
 **/dbcreds.pyc
 *.ini
 
 #Python file with auth dict
 database.py 
+db_credentials
 
 ## Don't save png or temp files
 **/*.png
@@ -84,5 +87,4 @@ target/
 
 # numpy files
 *.npy
-
 **/*.out
