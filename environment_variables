@@ -7,3 +7,5 @@ export DATA_FOLDER="/mnt/data/shared/"
 export OUTPUT_FOLDER="/mnt/data/"$username"/models/"
 # add lib folder to PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:$ROOT_FOLDER/wef_oceans
+# source db_credentials
+source "/mnt/data/"$username"/wef_oceans/auth/db_credentials"
