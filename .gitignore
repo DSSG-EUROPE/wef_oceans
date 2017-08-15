@@ -15,7 +15,7 @@ db_credentials
 **/*~
 
 ### Custom
-*.pdf
+#*.pdf
 *.png
 *.swp
 default_profile
