@@ -1,0 +1,2 @@
+[postgresql]
+url=postgresql://<HOST>:5432/<DATABASE>
