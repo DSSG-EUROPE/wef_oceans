@@ -11,12 +11,10 @@ INNER JOIN (SELECT DISTINCT ON (mmsi)
 	    FROM ais_is_fishing_model.test_data_predictions
 	    ORDER BY mmsi, last_timestamp DESC) table_2
 on (table_1.mmsi = table_2.mmsi);
-*/
 
--- add a mean is fishing score
+-- component mean is fishing score
 ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS mean_is_fishing float8;
 WITH t AS (
-	-- Any generic query which returns rowid and corresponding calculated values
 	SELECT *
 	FROM unique_vessel.aggregated_register_components AS t1
 	INNER JOIN (SELECT mmsi as rowid, AVG(is_fishing) AS is_fishing_mean
@@ -29,4 +27,83 @@ SET mean_is_fishing = t.is_fishing_mean
 FROM t
 WHERE unique_vessel.aggregated_register_components.mmsi = t.rowid;
 
---ALTER TABLE unique_vessel.aggregated_register_components DROP COLUMN mean_is_fishing;
+-- component max is fishing score
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS max_is_fishing float8;
+WITH t AS (
+	SELECT *
+	FROM unique_vessel.aggregated_register_components AS t1
+	INNER JOIN (SELECT mmsi as rowid, MAX(is_fishing) AS is_fishing_max
+		    FROM ais_is_fishing_model.test_data_predictions
+	            GROUP BY mmsi) AS t2
+	ON (t1.mmsi = t2.rowid)
+)
+UPDATE unique_vessel.aggregated_register_components
+SET max_is_fishing = t.is_fishing_max
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.rowid;
+
+-- component mpa_count
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS mpa_count int8;
+WITH t AS (
+	SELECT t1.mmsi, COALESCE(t2.mpa_count, 0) AS mpa_count
+	FROM unique_vessel.aggregated_register_components AS t1
+	LEFT JOIN (SELECT mmsi as rowid, mpa_count
+		   FROM world_protected_areas.ais_mpa_grouped) AS t2
+	ON (t1.mmsi = t2.rowid)
+)
+UPDATE unique_vessel.aggregated_register_components
+SET mpa_count = t.mpa_count
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+
+-- component mpa_count normalised
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS mpa_count_norm float8;
+WITH t AS (
+    SELECT t1.mmsi, t1.mpa_count::float / t1.count_ais_position_yr::float AS mpa_count_norm
+    FROM unique_vessel.aggregated_register_components AS t1
+)
+UPDATE unique_vessel.aggregated_register_components
+SET mpa_count_norm = t.mpa_count_norm
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+
+-- component mpa_time_seconds
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS mpa_time_seconds int8;
+WITH t AS (
+	SELECT t1.mmsi, COALESCE(t2.mpa_time_seconds, 0) AS mpa_time_seconds
+	FROM unique_vessel.aggregated_register_components AS t1
+	LEFT JOIN (SELECT mmsi as rowid, mpa_time_seconds
+		   FROM world_protected_areas.ais_mpa_grouped) AS t2
+	ON (t1.mmsi = t2.rowid)
+)
+UPDATE unique_vessel.aggregated_register_components
+SET mpa_time_seconds = t.mpa_time_seconds
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+
+-- component eez_count
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS eez_count integer;
+WITH t AS (
+	SELECT *
+	FROM unique_vessel.aggregated_register_components AS t1
+	INNER JOIN (SELECT mmsi as rowid, SUM(in_eez) AS count_eez
+		    FROM ais_is_fishing_model.test_data_predictions
+	            GROUP BY mmsi) AS t2
+	ON (t1.mmsi = t2.rowid)
+)
+UPDATE unique_vessel.aggregated_register_components
+SET eez_count = t.count_eez
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.rowid;
+
+-- component mpa_count normalised
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS eez_count_norm float8;
+WITH t AS (
+    SELECT t1.mmsi, t1.eez_count::float / t1.count_ais_position_yr::float AS eez_count_norm
+    FROM unique_vessel.aggregated_register_components AS t1
+)
+UPDATE unique_vessel.aggregated_register_components
+SET eez_count_norm = t.eez_count_norm
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+*/
