@@ -1,4 +1,3 @@
-/*
 -- copy aggregated_register table to new table with componenets
 CREATE TABLE unique_vessel.aggregated_register_components AS
 SELECT table_1.mmsi, table_1.count_ais_position_yr, table_2.last_timestamp, table_2.last_longitude, table_2.last_latitude
@@ -106,4 +105,16 @@ UPDATE unique_vessel.aggregated_register_components
 SET eez_count_norm = t.eez_count_norm
 FROM t
 WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
-*/
+
+-- component vessel_country added from mmsi mid
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS vessel_country varchar(50);
+WITH t AS (
+    SELECT t1.mmsi, SUBSTRING(t1.mmsi::text, 1, 3)::int4 AS mid, t2.rowid, t2.country
+    FROM unique_vessel.aggregated_register_components AS t1
+    LEFT JOIN (SELECT mid::int4 AS rowid, country FROM ais_messages.ais_mmsi_mid) AS t2
+    ON SUBSTRING(t1.mmsi::text, 1, 3)::int4 = t2.rowid
+)
+UPDATE unique_vessel.aggregated_register_components
+SET vessel_country = t.country
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
