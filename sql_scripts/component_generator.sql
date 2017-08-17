@@ -118,3 +118,19 @@ UPDATE unique_vessel.aggregated_register_components
 SET vessel_country = t.country
 FROM t
 WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+
+-- component sat_imagery_count from gbdx_metadata
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS sat_imagery_count integer;
+WITH t AS (
+    SELECT t1.mmsi, COALESCE(t2.count, 0) AS sat_imagery_count
+    FROM unique_vessel.aggregated_register_components AS t1
+    LEFT JOIN (
+		SELECT mmsi AS rowid, COUNT(mmsi)
+		FROM gbdx_metadata.overlap_marine_ocean_areas
+		GROUP BY mmsi) AS t2
+    ON (t1.mmsi = t2.rowid)
+)
+UPDATE unique_vessel.aggregated_register_components
+SET sat_imagery_count = t.sat_imagery_count
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
