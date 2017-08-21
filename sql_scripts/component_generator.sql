@@ -134,3 +134,22 @@ UPDATE unique_vessel.aggregated_register_components
 SET sat_imagery_count = t.sat_imagery_count
 FROM t
 WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
+
+-- component stddev_timediff of gbdx_metadata
+ALTER TABLE unique_vessel.aggregated_register_components ADD COLUMN IF NOT EXISTS stddev_timediff integer;
+WITH t AS (
+SELECT t1.mmsi, STDDEV(t1.time_diff) AS stddev_timediff
+	FROM
+	(SELECT mmsi,
+	        EXTRACT(EPOCH FROM (timestamp - LAG(timestamp) OVER
+	                (PARTITION BY mmsi ORDER BY timestamp))) AS time_diff 
+	FROM ais_is_fishing_model.test_data_predictions
+	ORDER BY mmsi, timestamp
+	) t1
+	WHERE t1.time_diff IS NOT NULL
+	GROUP BY t1.mmsi
+)
+UPDATE unique_vessel.aggregated_register_components
+SET stddev_timediff = t.stddev_timediff
+FROM t
+WHERE unique_vessel.aggregated_register_components.mmsi = t.mmsi;
