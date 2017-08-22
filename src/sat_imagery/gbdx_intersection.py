@@ -135,16 +135,14 @@ def week_dates(year, week):
 def retrieve_images_marine_areas(marine_areas, request_limit=1000,
                                  filters=['cloudCover < 30'],
                                  types=['DigitalGlobeAcquisition']):
-   """
+    """
     Retrieve all available images in a list of AOIs (shapely objects).
     Loop over days of year of interest if it exceeds request_limit 
     (default 1000). Created specifically to retrieve geometries from 
     marine areas in CartoDB.
     """
-
     results = []
-    n = 0    
-
+    n = 0
     for e, i in enumerate(marine_areas):
         while True:
             try:
@@ -218,7 +216,7 @@ def create_buffers_points(geom_wkb, size, proj=False):
                                 pyproj.Proj(init='epsg:3857'), # source coordinate system
                                 pyproj.Proj(init='epsg:4326')) # destination coordinate system
 
-    geom = shapely.wkb.loads(geom_wkb, hex=True)
+    geom = wkb.loads(geom_wkb, hex=True)
     geom_proj = transform(project_to_meters, geom)
     geom_buffer_meters = geom_proj.buffer(size, cap_style=3)
     
@@ -264,6 +262,14 @@ def wkt_to_json(wkt_string):
     geom_sp = sp.wkt.loads(wkt_string)
     geo_json = geojson.Feature(geometry=geom_sp, properties={})
     return geo_json.geometry
+
+
+
+
+
+
+
+
 
 
 
