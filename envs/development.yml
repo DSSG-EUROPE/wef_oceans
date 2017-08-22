@@ -1,8 +1,11 @@
 name: development
 channels:
+- bokeh
 - conda-forge
 - defaults
 dependencies:
+- colorcet=0.9.1=py35_0
+- datashader=0.6.0=py35_0
 - alabaster=0.7.10=py35_0
 - anaconda-client=1.6.3=py35_0
 - asn1crypto=0.22.0=py35_0
@@ -106,7 +109,6 @@ dependencies:
 - openssl=1.0.2l=0
 - owslib=0.14.0=py35_0
 - packaging=16.8=py35_0
-- pandas=0.20.1=np112py35_0
 - pandoc=1.19.2=0
 - pandocfilters=1.4.1=py35_0
 - partd=0.3.8=py35_0
@@ -141,6 +143,7 @@ dependencies:
 - qtawesome=0.4.4=py35_0
 - qtconsole=4.3.0=py35_0
 - qtpy=1.2.1=py35_0
+- readline=6.2=0
 - rtree=0.8.3=py35_0
 - s3fs=0.1.1=py35_0
 - s3transfer=0.1.10=py35_1
@@ -197,8 +200,7 @@ dependencies:
 - cloudpickle=0.2.2=py35_0
 - clyent=1.2.2=py35_0
 - cryptography=1.8.1=py35_0
-- dask=0.14.3=py35_1
-- datashader=0.4.0=py35_0
+- dask=0.15.1=py35_0
 - dbf=0.96.003=py35_0
 - fastcache=1.0.2=py35_1
 - flask=0.12.2=py35_0
@@ -232,7 +234,9 @@ dependencies:
 - numpy=1.12.1=py35_0
 - odo=0.5.0=py35_1
 - openpyxl=2.4.7=py35_0
+- pandas=0.20.3=py35_0
 - pango=1.40.3=1
+- param=1.5.1=py35_0
 - path.py=10.3.1=py35_0
 - pcre=8.39=1
 - pickleshare=0.7.4=py35_0
@@ -246,7 +250,6 @@ dependencies:
 - pyopenssl=17.0.0=py35_0
 - pyparsing=2.1.4=py35_0
 - qt=5.6.2=4
-- readline=6.2=2
 - requests=2.14.2=py35_0
 - rope=0.9.4=py35_1
 - ruamel_yaml=0.11.14=py35_1
