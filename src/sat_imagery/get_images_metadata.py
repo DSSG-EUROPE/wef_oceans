@@ -2,7 +2,7 @@ import pandas as pd
 import geojson, json
 from src.sat_imagery import gbdx_intersection as sat
 
-from utils
+import utils
 from utils import db_connect
 '''
 Retrieve data on two AOI's over the oceans: marine areas and oceans
