@@ -58,19 +58,19 @@ helpPopup <- function(title, content,
 ########################## DATA CONNECTION TO  ##########################
 ############################# POSTGRESQL ################################
 #########################################################################
-# # create a connection
-# # save the password that we can "hide" it as best as we can by collapsing it
+ # create a connection
+ # save the password that we can "hide" it as best as we can by collapsing it
 # pw <- {
 #   "new_user_password"
 # }
-# 
-# drv <- dbDriver("PostgreSQL")
-# # creates a connection to the postgres database
-# # note that "con" will be used later in each connection to the database
-# con <- dbConnect(drv, dbname = "postgres",
-#                  host = "localhost", port = 5432,
-#                  user = "openpg", password = pw)
+ 
+drv <- dbDriver("PostgreSQL")
+ # creates a connection to the postgres database
+ # note that "con" will be used later in each connection to the database
+con <- dbConnect(drv, dbname = Sys.getenv('PGDATABASE'),
+                 host = Sys.getenv('PGHOST')  , port = 5432,
+                 user = Sys.getenv('PGUSER'), password = Sys.getenv('PGPASSWORD'))
 # rm(pw) # removes the password
-# 
+ 
 # # check for the cartable
 # dbExistsTable(con, "cartable")
