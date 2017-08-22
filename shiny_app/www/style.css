@@ -1,0 +1,35 @@
+input[type="number"] {
+  max-width: 80%;
+}
+
+/* Customize fonts */
+body, label, input, button, select { 
+  font-family: 'Helvetica Neue', Helvetica;
+  font-weight: 200;
+}
+h1, h2, h3, h4 { font-weight: 400; }
+
+#component_table{
+    -moz-transform: scale(0.7, 0.7); /* Moz-browsers */
+    zoom: 0.7; /* Other non-webkit browsers */
+    zoom: 70%; /* Webkit browsers */
+}
+
+/* Marker setup */
+.awesome-marker {
+  background:0;
+  width: 35px; 
+  height: 46px;
+  position:absolute;
+  left:0;
+  top:0;
+  display: block;
+  text-align: center;
+}
+
+.awesome-marker-shadow {
+  background:0;
+  width: 36px;
+  height: 16px;
+}
+
