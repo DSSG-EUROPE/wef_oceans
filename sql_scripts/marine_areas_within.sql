@@ -1,3 +1,4 @@
+/*
 --Create marine protected areas table (Ia are the most stringent ones)
 CREATE TABLE world_protected_areas.marine_areas AS
 SELECT *
@@ -17,3 +18,11 @@ SELECT *
 FROM ais_messages.full_year_position pts
 INNER JOIN world_protected_areas.marine_areas pol
 ON ST_Within(pts.geom, pol.marine_geom);
+*/
+
+--Aggregate feature by mmsi 
+CREATE TABLE world_protected_areas.ais_mpa_grouped AS
+SELECT mmsi, COUNT(mmsi), @EXTRACT(EPOCH FROM age(MAX("timestamp"), MIN("timestamp")))
+FROM world_protected_areas.ais_protected_areas
+WHERE world_protected_areas.ais_protected_areas.mmsi = world_protected_areas.ais_protected_areas.mmsi
+GROUP BY mmsi;
