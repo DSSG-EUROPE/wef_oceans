@@ -11,8 +11,10 @@ A vessel risk framework to identify vessels involved in illegal, unregulated, an
 
 \documentclass[12pt]{article}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage[apaciteclassic]{apacite}
 \usepackage[bitstream-charter]{mathdesign}
-
+\usepackage{siunitx}
 \usepackage{geometry}
     \geometry{
     a4paper,
@@ -39,7 +41,12 @@ A vessel risk framework to identify vessels involved in illegal, unregulated, an
 \input{./sections/section_6} % further work
 \input{./sections/acknowledgements}
 
-\bibliographystyle{abbrv}
-\bibliography{main}
+\clearpage  
+
+\bibliographystyle{apacite}
+\bibliography{bibliography.bib}
+
+%\bibliographystyle{abbrv}
+%\bibliography{main}
 
 \end{document}
