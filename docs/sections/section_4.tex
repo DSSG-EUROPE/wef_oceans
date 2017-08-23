@@ -8,7 +8,7 @@ MPAs are classified into several categories based on the fishing restrictions. R
 
 Being able to identify weather a vessel is fishing at any point along its trajectory will help us identify vessels fishing in MPAs and Exclusive Economic Zones.
 
-\section{Data}
+\subsection{Data}
 
 We are using the AIS data provided by \href{https://spire.com/}{Spire}.
 AIS transceivers send positional data every 2-10 seconds and static data every 6 minutes.
@@ -45,10 +45,10 @@ The static data contains the following fields:
 
 We have access to an year of worldwide AIS messages. We also used the training data provided by \href{globalfishingwatch.github.io}{Global Fishing Watch}. The data contains positional data and the labels for weather the vessel was fishing at that point or not. This data set was labeled for 90 vessels over a period of 3 years.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
-\includegraphics[width=0.3\textwidth]{images/ais_summary.png}
-\caption{\label{fig:AIS broadcast summary}Number of positional and static AIS messages for a period of 1 year}
+	\includegraphics[width=0.3\linewidth]{images/ais_summary.png}
+	\caption{Number of positional and static AIS messages for a period of 1 year}\label{fig:AIS broadcast summary} 
 \end{figure}
 
 \section{Modelling}
@@ -108,8 +108,3 @@ Vessels spend most of their time being docked. Also, reported fishing vessels sp
 \caption{\label{fig:Fishing score distribution}Fishing score distributions for reported and non reported fishing vessels.}
 \end{figure}
 
-
-\bibliographystyle{alpha}
-\bibliography{sample}
-
-\end{document}
