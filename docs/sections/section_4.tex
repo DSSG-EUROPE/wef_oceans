@@ -16,7 +16,7 @@ AIS transceivers send positional data every 2-10 seconds and static data every 6
 The positional AIS data contains the following fields:
 \begin{itemize}
 \item The vessel's Maritime Mobile Service Identity (MMSI) – a unique nine digit identification number.
-\item Navigation status – "at anchor", "under way using engine(s)", "not under command", etc.
+\item Navigation status - "at anchor", "under way using engine(s)", "not under command", etc.
 \item Rate of turn – right or left, from 0 to 720 degrees per minute
 \item Speed over ground – 0.1-knot (0.19 km/h) resolution from 0 to 102 knots (189 km/h)
 \item Positional accuracy:
@@ -62,7 +62,7 @@ We generated features like distance from shore, port, day or night during the ti
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{images/feature_importance_final.png}
+\includegraphics[width=0.5\textwidth]{images/feature_importance_final.png}
 \caption{\label{fig:Feature importance}Feature importance for AIS positional features.}
 \end{figure}
 
@@ -72,7 +72,7 @@ Given we have a time series data, we split our data set into multiple temporal f
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{images/temporal_cv.png}
+\includegraphics[width=0.5\textwidth]{images/temporal_cv.png}
 \caption{\label{fig:Temporal Cross-validation}Temporal splits for each fold}
 \end{figure}
 
@@ -83,7 +83,7 @@ After talking to our partners, we came to the conclusion that we want to optimiz
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{images/precision_recall_curve.png}
+\includegraphics[width=0.5\textwidth]{images/precision_recall_curve.png}
 \caption{\label{fig:Precision-Recall}Precision-Recall curve for different models}
 \end{figure}
 
@@ -97,14 +97,14 @@ Vessels spend most of their time being docked. Also, reported fishing vessels sp
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{images/distance_to_shore.png}
+\includegraphics[width=0.5\textwidth]{images/distance_to_shore.png}
 \caption{\label{fig:Distance to shore distribution}Distribution of distance to shore in the AIS messages}
 \end{figure}
 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{images/fishing_score_distributions.png}
+\includegraphics[width=0.5\textwidth]{images/fishing_score_distributions.png}
 \caption{\label{fig:Fishing score distribution}Fishing score distributions for reported and non reported fishing vessels.}
 \end{figure}
 
