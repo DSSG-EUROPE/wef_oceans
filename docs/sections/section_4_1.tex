@@ -19,15 +19,24 @@ The process of image retrieval was a tree step operation. First, we retrieve all
 are the areas near the continental land. This process yielded 187.038 images.\footnote{Additional 18.476 images were retrieved using 
 Planet imagery only for the Torres Strait.}. Second, we overlap the bounding boxes of the imagery tiles with the AIS positional signals. 
 This process was not only a spatial join, but also a time join which took into account the difference of time between the picture 
-capture timestamp and the positional AIS timestamp, the Figure \ref{overlap} show the outcome of this step. In total, for Digital Globe,
-the intersection retrieved 1072 AIS positional signals (487 unique vessels). Third, we crop the images using a 800 meters square buffer 
-of each the AIS coordinates inside the overlap. 
+capture timestamp and the positional AIS timestamp. Figure \ref{overlap} shows the outcome of this step. In total, for Digital Globe,
+the intersection retrieved 1.072 AIS positional signals (487 unique vessels). Third, we crop the images using a 800 meters square buffer 
+of each the AIS coordinates inside the overlap. The Figure \ref{mosaic} shows the final outcome of this process.
 
 \begin{figure}[h]
 	\centering \caption{Overlap Digital Globe and AIS data (May 2016 - June 2017)}\label{overlap}
 \includegraphics[width=0.6\linewidth]{images/overlap_gbdx.png} 
 \begin{flushleft}
 \rule{1.2in}{0em} \scriptsize Source: Digital Globe, Spire and OpenStreetMap. \\
+\par
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[h]
+	\centering \caption{Cropped  (May 2016 - June 2017)}\label{overlap}
+\includegraphics[width=0.6\linewidth]{images/mosaic_planet_torres_strait.png} 
+\begin{flushleft}
+\rule{1.2in}{0em} \scriptsize Source: Planet and Spire. \\
 \par
 \end{flushleft}
 \end{figure}
