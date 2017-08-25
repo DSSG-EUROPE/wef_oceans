@@ -1,77 +1,27 @@
-# Project structure
+# Developing a Fishing Risk Framework from Satellites and Ocean Data
+This project as part of Data Science for Social Good (DSSG) Europe 2017 combines multiple data sources to generate a fishing vessel risk score. The desired use of this risk score is to provide governmenrts, NGOs, retailers, and enforcement agencies the information required to identify vessels fishing in an illegal, unregulated or unreported way.
 
-```
-.
-├── auth
-│   └── database.ini
-├── environment_variables
-├── envs
-│   ├── ais_env.yml
-│   ├── development.yml
-│   ├── gbdx_env.yml
-│   └── modis_env.yml
-├── LICENSE
-├── models
-├── notebooks
-│   ├── data_exploration
-│   │   ├── 0.0-wg-ais_eda_2month.ipynb
-│   │   ├── 0.1-wg-ais_eda_1year.ipynb
-│   │   ├── 1.0-wg-ais_iuu_list_intersection_2month.ipynb
-│   │   ├── 1.1-wg-ais_iuu_list_intersection_1year.ipynb
-│   │   ├── 2.0-im-ais_gbdx_intersection.ipynb
-│   │   └── 3.0-st-fishing_or_not_model.ipynb
-│   ├── gbdx
-│   │   ├── gbdx_data_description_html.ipynb
-│   │   └── gbdx_data_description.ipynb
-│   └── planet
-│       ├── planet_labs_data_ais.ipynb
-│       └── planet_search.py
-├── __pycache__
-├── README.md
-├── reports
-│   └── gbdx_torres_strait_coverage.html
-├── src
-│   ├── data
-│   │   ├── coast_coords_country.npy
-│   │   └── iuu_list_of_lists.csv
-│   ├── features
-│   │   └── feature_generation.py
-│   ├── __init__.py
-│   └── models
-│       ├── data
-│       ├── gear_type
-│       ├── __init__.py
-│       ├── is_fishing
-│       │   ├── evaluate_is_fishing.py
-│       │   ├── test_is_fishing.py
-│       │   └── train_is_fishing.py
-│       └── main.py
-├── trees
-└── utils
-    ├── database.ini
-    ├── db_connect.py
-    ├── __init__.py
-    └── __pycache__
+This work was conducted in partnership with the World Economic Forum as part of the 'New Vision for the Oceans'. 
 
-18 directories, 32 files
-```
+This repository contains to process Automatic Identification System (AIS) data, and satellite imagery.
 
+## Data providers
 
-# Oceans Data Challenge
-
-Every year around 26 million tonnes of seafood worth close to $24 billion are extracted from the planet's oceans by illegal, unreported and unregulated (IUU) fishing. These IUU fishing techniques include: extracting fish from waters of other nations or designated marine protected areas, catching fish using illegal and ecologically damaging techniques, or under-declaring fish by transshipment at sea. Such practices are especially rife in the rich tropical waters of Southeast Asia due to the burgeoning demand in the region, and challenges of enforcement. This project sets out to address the problem of IUU fishing by correlating multiple data sources, and using data science techniques to identify vessels involved in IUU fishing.
-
-Overfishing and IUU fishing have lead to huge declines in fish stock and some species such as tuna have declined by over 90%. Our project partner the World Economic Forum (WEF) is committed to improving the state of the world by engaging business, political, academic, and other leaders of society to shape global, regional, and industry agendas. In particular the WEF promotes initiatives to improve ocean governance, food chain sustainability, and environmental conservation.
-
-In partnership with the WEF this DSSG Europe project has set out to create an open-source tool combining multiple data sources to help combat IUU fishing. This proof-of-principle study of fishing in the Torres Strait aimed to demonstrate how data aggregation from sources such as satellite imagery, synthetic aperture radar (SAR) and automatic identification systems (AIS) can be correlated and used with data science methods such as object recognition and anomaly detection to aid in identification of illegal fishing. This data science approach to detecting IUU fishing could ultimately improve enforcement, guide governance, and inform policy decision making.
-
-There are many challenges associated with detecting IUU fishing. Firstly, the world's ocean comprise the majority of the Earth’s surface (71%). This is a large area to inspect and hence the volumes of data involved are large. There are many vessels in this large area relating to commercial, leisure, or fishing activities. Systems to detect and track these vessels such as automatic identification systems (AIS) tend to be implemented nationally in vessel management systems (VMS), hence there is little standardization of the data format. Satellite data on the other hand is relatively infrequent, can be obscured by cloud cover, and may not have good coverage in the ocean. Combining these data sources can be difficult to find appropriate images and AIS data. There is also a distinct lack of high-resolution open-source data sources in this domain, due to the cost of data collection. 
-
-A socially desirable outcome for this project would be to successfully demonstrate how these data can be used to identify IUU fishing. In partnership with the WEF and organisations this can be conveyed to policy and decision makers to expand the study. A socially desirable outcome would be to improve detection of illegal fishing via these data sources, a secondary outcome of this would be to provide improved enforcement of illegal fishing, which in turn would improve regulation as it becomes harder to evade capture. The result of this would be to promote more sustainable fishing practice and environmental conservation. 
-
-## Automatic Identification System (AIS) data
 Data for this project was provided by SPIRE
 https://spire.com/
+
+## Installation
+## Usage
+
+## Authors
+
+## Acknowledgments
+
+## License
+This project is licensed under the MIT License - see the LICENSE.md file for details
+
+
+<!--
 
 ### Uploading data to database from S3 to AWS (wef-oceans)
 
@@ -172,3 +122,4 @@ FROM ais_messages.full_year_static
 WHERE (mmsi IS NULL OR mmsi < 100000000) 
 OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00');
 ```
+-->
