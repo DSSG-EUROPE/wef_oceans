@@ -8,47 +8,47 @@ MPAs are classified into several categories based on the fishing restrictions. R
 
 Being able to identify weather a vessel is fishing at any point along its trajectory will help us identify vessels fishing in MPAs and Exclusive Economic Zones.
 
-\subsection{Data}
+\section{Data}
 
 We are using the AIS data provided by \href{https://spire.com/}{Spire}.
 AIS transceivers send positional data every 2-10 seconds and static data every 6 minutes.
 
 The positional AIS data contains the following fields:
 \begin{itemize}
-\item The vessel's Maritime Mobile Service Identity (MMSI) – a unique nine digit identification number.
-\item Navigation status - "at anchor", "under way using engine(s)", "not under command", etc.
-\item Rate of turn – right or left, from 0 to 720 degrees per minute
-\item Speed over ground – 0.1-knot (0.19 km/h) resolution from 0 to 102 knots (189 km/h)
+\item The vessel's Maritime Mobile Service Identity (MMSI) : a unique nine digit identification number.
+\item Navigation status : "at anchor", "under way using engine(s)", "not under command", etc.
+\item Rate of turn : right or left, from 0 to 720 degrees per minute
+\item Speed over ground : 0.1-knot (0.19 km/h) resolution from 0 to 102 knots (189 km/h)
 \item Positional accuracy:
-Longitude – to 0.0001 minutes
-Latitude – to 0.0001 minutes
-\item Course over ground – relative to true north to 0.1°
-\item True heading – 0 to 359 degrees (for example from a gyro compass)
+Longitude : to 0.0001 minutes
+Latitude : to 0.0001 minutes
+\item Course over ground : relative to true north to 0.1°
+\item True heading : 0 to 359 degrees (for example from a gyro compass)
 \item True bearing at own position. 0 to 359 degrees
-UTC Seconds – The seconds field of the UTC time when these data were generated.
+UTC Seconds : The seconds field of the UTC time when these data were generated.
 \end{itemize}
 
 The static data contains the following fields:
 
 \begin{itemize}
-\item IMO ship identification number – a seven digit number that remains unchanged upon transfer of the ship's registration to another country
-\item Radio call sign – international radio call sign, up to seven characters, assigned to the vessel by its country of registry
-\item Name – 20 characters to represent the name of the vessel
+\item IMO ship identification number : a seven digit number that remains unchanged upon transfer of the ship's registration to another country
+\item Radio call sign : international radio call sign, up to seven characters, assigned to the vessel by its country of registry
+\item Name : 20 characters to represent the name of the vessel
 \item Type of ship/cargo
-\item Dimensions of ship – to nearest meter
-\item Location of positioning system's (e.g., GPS) antenna on board the vessel - in meters aft of bow and meters port or starboard
-\item Type of positioning system – such as GPS, DGPS or LORAN-C.
-\item Draught of ship – 0.1 meter to 25.5 meters
-\item Destination – max. 20 characters
-\item ETA (estimated time of arrival) at destination – UTC month/date hour:minute
+\item Dimensions of ship : to nearest meter
+\item Location of positioning system's (e.g., GPS) antenna on board the vessel : in meters aft of bow and meters port or starboard
+\item Type of positioning system : such as GPS, DGPS or LORAN-C.
+\item Draught of ship : 0.1 meter to 25.5 meters
+\item Destination : max. 20 characters
+\item ETA (estimated time of arrival) at destination : UTC month/date hour:minute
 \end{itemize}
 
 We have access to an year of worldwide AIS messages. We also used the training data provided by \href{globalfishingwatch.github.io}{Global Fishing Watch}. The data contains positional data and the labels for weather the vessel was fishing at that point or not. This data set was labeled for 90 vessels over a period of 3 years.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-	\includegraphics[width=0.3\linewidth]{images/ais_summary.png}
-	\caption{Number of positional and static AIS messages for a period of 1 year}\label{fig:AIS broadcast summary} 
+\includegraphics[width=0.5\textwidth]{images/ais_summary.png}
+\caption{\label{fig:AIS broadcast summary}Number of positional and static AIS messages for a period of 1 year}
 \end{figure}
 
 \section{Modelling}
@@ -80,6 +80,7 @@ We compute various metrics like precision, recall, false positive and true posit
 
 \subsection{Model selection}
 After talking to our partners, we came to the conclusion that we want to optimize for precision of our models.
+For example, in the following figure, you can see three precision-recall curves. For the model represented by the blue curve, you see high precision at first and then the precision get worse than the same for other models. The models we select also depend on how many cases our partner can act upon. If the partner can act upon K cases, then we should select the model that maximizes precision for those K cases.
 
 \begin{figure}[H]
 \centering
@@ -108,3 +109,8 @@ Vessels spend most of their time being docked. Also, reported fishing vessels sp
 \caption{\label{fig:Fishing score distribution}Fishing score distributions for reported and non reported fishing vessels.}
 \end{figure}
 
+
+\bibliographystyle{alpha}
+\bibliography{sample}
+
+\end{document}
