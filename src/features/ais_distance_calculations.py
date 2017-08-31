@@ -144,6 +144,10 @@ def distance_to_port(lon, lat):
     return df_distance_to_port
 
 if __name__ == "__main__":
+    save_coastline_shape_file()
+    save_ports_shape_file()
+    # test points
+    """
     print(distance_to_shore(pd.Series(178.42), pd.Series(-18.1270713806)))
     print(distance_to_port(pd.Series(178.42), pd.Series(-18.1270713806)))
     print(distance_to_shore(pd.Series(-9.89), pd.Series(38.70)))
@@ -154,3 +158,4 @@ if __name__ == "__main__":
     print(distance_to_port(pd.Series(-80.384521), pd.Series(0.058747)))
     print(distance_to_shore(pd.Series(160), pd.Series(-35)))
     print(distance_to_port(pd.Series(160), pd.Series(-35)))
+    """
