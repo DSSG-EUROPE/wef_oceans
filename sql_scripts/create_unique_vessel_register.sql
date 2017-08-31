@@ -1,3 +1,4 @@
+CREATE SCHEMA unique_vessel;
 create table unique_vessel.aggregated_register
 as(
 	SELECT mmsi, COUNT(*) as count_ais_position_yr 
