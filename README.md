@@ -1,24 +1,57 @@
-# Developing a Fishing Risk Framework from Satellites and Ocean Data
-This project as part of Data Science for Social Good (DSSG) Europe 2017 combines multiple data sources to generate a fishing vessel risk score. The desired use of this risk score is to provide governmenrts, NGOs, retailers, and enforcement agencies the information required to identify vessels fishing in an illegal, unregulated or unreported way.
+# A Fishing Risk Framework from Satellites and Ocean Data
+This proof-of-concept system creates a fishing vessel risk framework to assess the likelihood of a vessel engaging in illegal, unregulated, or unreported (IUU) fishing. The framework uses multiple indicators to evaluate a vessel and suggest whether it is likely to be involved in IUU fishing, with the information being displayed in a front end web application.
 
-This work was conducted in partnership with the World Economic Forum as part of the 'New Vision for the Oceans'. 
+Several indicators have been included in this working proof-of-concept, including the likelihood that a vessel has previously been fishing in a marine protected area (MPA) or exclusive economic zone (EEZ), and the intermittency of the AIS signal. These indicators can be weighted according to the use case or for convenience combined into a unified vessel risk score.
 
-This repository contains to process Automatic Identification System (AIS) data, and satellite imagery.
+A unique aspect of the proposed fishing risk framework comes from the ability to combine AIS data with satellite imagery building a library of data from multiple sources about each vessel.
+
+## Requirements
+This pipeline requires a PostgreSQL database, Anaconda Python version 3, and R version 3. Preprocessing, feature generation, and modelling was performed in Python, with risk indicators created in PSQL, and the web application made in Rshiny. 
+
+- Define locations for repository, data, models, and add root folder to  python path `conda env create -f environment.yml`
+- Create conda environment for pipeline `conda env create -f envs/development.yml`
+
+## How to run the pipeline
+
+
+
+
+## Collaborations
+* World Economic Forum (https://www.weforum.org/)
+* IBM (https://www.ibm.com/)
+
 
 ## Data providers
-
-Data for this project was provided by SPIRE
-https://spire.com/
-
-## Installation
-## Usage
+* Digital Globe, Inc. (http://www.digitalglobe.com/)
+* Planet Labs, Inc. (https://www.planet.com/)
+* Spire Global, Inc. (https://spire.com/)
 
 ## Authors
+This project was conducted as part of Data Science for Social Good (DSSG) Europe 2017 fellowship, further details of the 12 week summer fellowship can be found here:
+https://dssg.uchicago.edu/europe/
+
+Data science fellows:
+* Iván Higuera Mendieta
+* Shubham Tomar
+* William Grimes
+
+Technical mentor:
+* Jane Zanzig
+
+Project manager:
+* Paul van der Boor
 
 ## Acknowledgments
+The authors would like to thank Euro Beinat and Nishan Degnarain for having the vision to persue a data science project for detection of IUU fishing vessels. Further the weekly calls and guidance with Nishan Degnarain and Steven Adler were instrumental to this projects success.
+
+We also extend our thanks for the helpful input, and discussion with the following: Dan Hammer, Gregory Stone, Kristina Boerder, Kyle Brazil, Nathan Miller, and Paul Woods.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details
+
+
+
+
 
 
 <!--
