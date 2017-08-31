@@ -62,7 +62,7 @@ This creates a count for each mmsi of the number of available rows in both AIS s
 ### 8. Create a vessel score of the number of times vessel was in marine protected area and time period
 `psql -f ./sql_scripts/marine_protected_areas_within.sql`
 
-### 8. Generate vessel risk indicators
+### 9. Generate vessel risk indicators
 Based on the existing tables, aggregate vessel MMSI indicators are created in this script
 `psql -f ./sql_scripts/component_generator.sql`
 
