@@ -1,4 +1,4 @@
-#An Illegal Fishing Vessel Risk Framework - Satellite imagery
+# An Illegal Fishing Vessel Risk Framework - Satellite imagery
 
 ### Requirements and authentications
 Our satellite images providers are commercial. In order to run the codes inside this repository you must have an active account for [Digital Globe] or [Planet Labs]. Each provider has its own API to query, activate, preprocess, and download imagery. Both API's are listed in the `development` environment and can be installed excecuting the following: 
