@@ -21,7 +21,7 @@ ais_gbdx_overlap["time_diff"] = (abs(ais_gbdx_overlap.timestamp - ais_gbdx_overl
 #################### CREATE POINT BUFFERS  ####################
 ###############################################################
 
-points_buffers = [sat.create_buffers_points(x) for x in ais_gbdx_overlap['geom']]
+points_buffers = [sat.create_buffers_points(x, 600, proj=False) for x in ais_gbdx_overlap['geom']]
 imgs = list(ais_gbdx_overlap['catalogID'])
 
 ###############################################################
