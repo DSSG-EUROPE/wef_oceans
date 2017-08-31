@@ -4,7 +4,7 @@
 Our satellite images providers are commercial. In order to run the codes inside this repository you must have an active account for [Digital Globe] or [Planet Labs]. Each provider has its own API to query, activate, preprocess, and download imagery. Both API's are listed in the `development` environment and can be installed excecuting the following: 
 
 ```bash
-source environment_variables` [`PLANET_API_KEY` is defined here]
+source environment_variables` [PLANET_API_KEY is defined here]
 conda env create -f envs/development.yml
 source activate development
 ```
