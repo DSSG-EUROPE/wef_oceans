@@ -1,4 +1,4 @@
-# A vessel risk framework to identify vessels involved in illegal, unregulated, and unreported fishing
+# An Illegal Fishing Vessel Risk Framework
 This proof-of-concept system creates a vessel risk framework to assess the likelihood of a vessel engaging in illegal, unregulated, or unreported (IUU) fishing. The framework uses multiple indicators to evaluate a vessel and suggest whether it is likely to be involved in IUU fishing, with the information being displayed in a front end web application.
 
 Thus far in development several indicators have been included in this working proof-of-concept, including the likelihood that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the intermittency of the vessels AIS signal. These indicators can be weighted according to the use case, or for convenience combined into a unified vessel risk score.
@@ -10,8 +10,8 @@ Running this pipeline requires a PostgreSQL database, Anaconda Python version 3,
 
 ### Requirements
 Before running the pipeline the following commands should be executed:
-1. Source environment variables `source environment_variables`
-2. Create conda environment for pipeline `conda env create -f envs/development.yml`
+* Source environment variables `source environment_variables`
+* Create conda environment for pipeline `conda env create -f envs/development.yml`
 
 ### 1. Download shape files for distance feature generation
 This will download shape files of coastlines and locations of ports for vessel distance calculations in preprocessing and feature generation step.
