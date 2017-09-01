@@ -6,7 +6,7 @@ Thus far in development several indicators have been included in this working pr
 The proposed fishing risk framework combines AIS tracking data with satellite imagery to show how multiple data sources can be combined to start building a library of historic evidence and data of a vessels behaviour.
 
 ## How to run the pipeline
-Running this pipeline requires a PostgreSQL database, Anaconda Python version 3, and R version 3. Pre-processing, feature generation, and modelling was performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be consulted [here](../master/src/sat_imagery/README_SAT.md) 
+Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, feature generation, and modelling was performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be consulted [here](../master/src/sat_imagery/README_SAT.md). Instruccions to run the RShiny app are [here](../master/shiny_app/README_APP.md)
 
 ### Requirements
 Before running the pipeline the following commands should be executed:
@@ -60,7 +60,7 @@ This creates a count for each mmsi of the number of available rows in both AIS s
 `psql -f ./sql_scripts/create_unique_vessel_register.sql`
 
 ### 8. Create a vessel score of the number of times vessel was in marine protected area and time period
-`psql -f ./sql_scripts/marine_protected_areas_within.sql`
+First, running ´bash ./sql_scripts/get_wdpa.sh´ will download a shapefile of all the [World Protected Areas](https://www.protectedplanet.net) and will upload the schema and the data to a PostgreSQL instance. Second, using the uploaded table the `psql -f ./sql_scripts/marine_protected_areas_within.sql` create a unique vessel score to account the presence in MPA's.
 
 ### 9. Generate vessel risk indicators
 Based on the existing tables, aggregate vessel MMSI indicators are created in this script
