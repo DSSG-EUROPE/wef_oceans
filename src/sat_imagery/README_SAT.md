@@ -4,12 +4,19 @@
 Our satellite images providers are commercial. In order to run the codes inside this repository you must have an active account for [Digital Globe] or [Planet Labs]. Each provider has its own API to query, activate, preprocess, and download imagery. Both API's are listed in the `development` environment and can be installed excecuting the following: 
 
 ```bash
-source environment_variables` [PLANET_API_KEY is defined here]
+source environment_variables
 conda env create -f envs/development.yml
 source activate development
 ```
 
-Digital Globe API, [GBDX], is Python native and needs the user to define authentication credentials under `~/.gbdx_auth` (see API documentation). To run [Planet API] the user needs to define a environment variable with the API key named `PLANET_API_KEY`. 
+Digital Globe API, [GBDX], is Python native and needs the user to define authentication credentials under `~/.gbdx_config` (see API documentation). To run [Planet API] the user needs to define a environment variable with the API key named `PLANET_API_KEY`. In this repo, the key is defined in: `./auth/db_credentials_example` 
+
+In order to upload data to our PostgreSQL database and use its geometry operations, we need to create the schemas to upload the data. To do this, we need to run first the following:
+
+```bash
+psql -f ./sql_scripts/upload_gbdx_schema.sql
+psql -f ./sql_scrips/upload_planet_schema.sql
+```
 
 ### Running the code
 
@@ -18,6 +25,8 @@ As described in the Technical documentation, a supplementary part of the analysi
 #### 1. Retrieve imagery:
 
 GBDX: `python src/sat_imagery/get_images_metadata.py`
+
+
 Planet: `python src/sat_imagery/search-items.py` 
 
 Digital Globe's code will iterate the query for each marine and ocean area in the world (see [CartoDB Boundaries]). Planet Labs code will look for an area defined in the `coords.json` file in the same directory. Both files will upload the metadata table directly to defined SQL Schemas.
@@ -25,12 +34,16 @@ Digital Globe's code will iterate the query for each marine and ocean area in th
 #### 2. Intersection: 
 
 GBDX: `psql -f ./sql_scripts/overlap_gbdx.sql`
+
+
 Planet: `psql -f ./sql_scrips/overlap_planet.sql`
 
 Both codes will create a SQL query which will create a new table with the total of vessel positional points inside the polygon of the images. 
 
 #### 3. Croping and dowloading
 GBDX: `python src/sat_imagery/retrieve_gbdx_crop.py`
+
+
 Planet: `cd ./notebooks/planet/ ; jupyter notebook `
 
 The GBDX code will create the buffers and use the GBDX's API crop task to retrieve the cropped images. This images are downloaded to the client S3 bucket. For Planet, a Jupyter Notebook illustrates who to activate, download and crop the images. Contrary to GBDX, Planet API crop task is subpar. We decide to crop the image using the `rasterio` library.
