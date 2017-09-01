@@ -60,7 +60,7 @@ This creates a count for each mmsi of the number of available rows in both AIS s
 `psql -f ./sql_scripts/create_unique_vessel_register.sql`
 
 ### 8. Create a vessel score of the number of times vessel was in marine protected area and time period
-First, running `bash ./sql_scripts/get_wdpa.sh` will download a shapefile of all the [World Protected Areas](https://www.protectedplanet.net) and will upload the schema and the data to a PostgreSQL instance. Second, using the uploaded table the `psql -f ./sql_scripts/marine_protected_areas_within.sql` create a unique vessel score to account the presence in MPA's.
+First, running `bash ./sql_scripts/get_wdpa.sh` will download a shapefile with all the [World Protected Areas](https://www.protectedplanet.net), and create and upload the schema and the data to a PostgreSQL instance. Second, using the uploaded table, the `psql -f ./sql_scripts/marine_protected_areas_within.sql` script will create a unique vessel score to account for the presence of vessels in MPA's.
 
 ### 9. Generate vessel risk indicators
 Based on the existing tables, aggregate vessel MMSI indicators are created in this script
