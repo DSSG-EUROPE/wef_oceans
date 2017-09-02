@@ -1,15 +1,3 @@
-\title{
-	\textsc{A vessel risk framework to identify vessels involved in illegal, unregulated, and unreported fishing} \\~\\
-	\textsc{Technical Report}
-}
-\author{Iv\'{a}n Higuera-Mendieta \\
-        \and
-        Shubham Tomar \\
-        \and
-        William Grimes\\
-}
-\date{\today}
-
 \documentclass[11pt, english]{article}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
@@ -17,47 +5,73 @@
 \usepackage{wrapfig}
 \usepackage{lipsum}
 \usepackage{titlesec}
-\usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{hyperref}
 \usepackage{float}
 \usepackage[apaciteclassic]{apacite}
 %\usepackage[bitstream-charter]{mathdesign}
 \usepackage{siunitx}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\hypersetup{
+        colorlinks = true,
+        citecolor = gray
+}
 \usepackage{geometry}
-    \geometry{
-    a4paper,
-    total={170mm,257mm},
-    left=20mm,
-    top=20mm,
+\geometry{
+        a4paper,
+        total={170mm,257mm},
+        left=20mm,
+        top=20mm,
 }
 
 \begin{document}
-\maketitle
+\hypersetup{linkcolor=black}
+
+\begin{titlepage}
+\hypersetup{pageanchor=false}
+    \begin{center}
+        \vspace*{1cm}
+        \huge
+	\textsc{A vessel risk framework to identify vessels involved in illegal, unregulated, and unreported fishing} \\~\\
+        \vspace{6cm}
+        \huge
+        \textbf{\textsc{Technical Report}} \\
+        \vspace{6cm}
+	\Large
+        \today \\
+        \vspace{1cm}
+        \includegraphics[width=0.65\textwidth]{images/logo} \\
+        \vfill
+	\Large
+	Iv\'{a}n Higuera-Mendieta \hfill Shubham Tomar  \hfill William Grimes \\
+    \end{center}
+\end{titlepage}
+
+\hypersetup{pageanchor=true}
 
 \begin{abstract}
-\input{./sections/abstract}
+\input{sections/abstract}
 \end{abstract}
 
 \clearpage
 \tableofcontents
 
 \newpage
-\input{./sections/section_1} % introduction
-\input{./sections/section_2} % previous work
-\input{./sections/section_3} % data sources
-\input{./sections/section_4} % approach
-\input{./sections/section_4_1} %sat_imagery
-\input{./sections/section_5} % evaluation
-\input{./sections/section_6} % further work
-\input{./sections/acknowledgements}
+\input{sections/section_1} % introduction
+\input{sections/section_2} % previous work
+\input{sections/section_3} % data sources
+\input{sections/section_4} % approach
+\input{sections/section_4_1} %sat_imagery
+\input{sections/section_5} % evaluation
+\input{sections/section_6} % further work
+\input{sections/acknowledgements}
 
 \clearpage  
 
 \bibliographystyle{apacite}
-\bibliography{bibliography.bib}
-
-%\bibliographystyle{abbrv}
-%\bibliography{main}
+\bibliography{bibliography}
 
 \end{document}
