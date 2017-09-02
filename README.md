@@ -6,7 +6,7 @@ Thus far in development several indicators have been included in this working pr
 The proposed fishing risk framework combines AIS tracking data with satellite imagery to show how multiple data sources can be combined to start building a library of historic evidence and data of a vessels behaviour.
 
 ## How to run the pipeline
-Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, feature generation, and modelling was performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be consulted [here](../master/src/sat_imagery/README_SAT.md). Instruccions to run the RShiny app are [here](../master/shiny_app/README_APP.md)
+Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, feature generation, and modelling was performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be consulted [here](../master/src/sat_imagery/README.md). Instruccions to run the RShiny app are [here](../master/shiny_app/README.md)
 
 ### Requirements
 Before running the pipeline the following commands should be executed:
