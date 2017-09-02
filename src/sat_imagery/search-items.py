@@ -43,7 +43,7 @@ request = filters.build_search_request(
 result = client.quick_search(request)
 
 #Create foluim map
-torres_strait = folium.Map(location=[142, -9],
+folium_map = folium.Map(location=[142, -9],
                    tiles='Mapbox Bright', zoom_start=2)
 folium.GeoJson(aoi, name='geojson').add_to(torres_strait)
 
@@ -54,7 +54,7 @@ folium.GeoJson(aoi, name='geojson').add_to(torres_strait)
 imgs = []
 for item in result.items_iter(limit=None):
     imgs.append(item)
-    folium.GeoJson(item, name='geojson').add_to(torres_strait)
+    folium.GeoJson(item, name='geojson').add_to(folium_map)
 
 print("Saving data!")
 #Save request 
@@ -87,7 +87,7 @@ print(metadata_df_polygons.shape)
 
 
 
-torres_strait.save('torres_strait.html')
+folium_map.save('folium_query_map.html')
 
 ###################################################################
 ######################### IMPORT TO CSV ###########################

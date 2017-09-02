@@ -29,7 +29,7 @@ GBDX: `python src/sat_imagery/get_images_metadata.py`
 
 Planet: `python src/sat_imagery/search-items.py` 
 
-Digital Globe's code will iterate the query for each marine and ocean area in the world (see [CartoDB Boundaries]). Planet Labs code will look for an area defined in the `coords.json` file in the same directory, you can check the [Geojson geometry builder] to create a new area of interest. Both files will upload the metadata table directly to defined SQL Schemas.
+Digital Globe's code will iterate the query for each marine and ocean area in the world (see [CartoDB Boundaries]). Planet Labs code will look for an area defined in the `coords.json` file in the same directory, you can check the [Geojson geometry builder] to create a new area of interest. Both files will upload the metadata table directly to defined SQL Schemas. Additionally, the Planet `search-items.py` will save a HTML Leaflet map to explore the retrieved data. 
 
 #### 2. Intersection: 
 
