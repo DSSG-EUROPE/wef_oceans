@@ -87,7 +87,7 @@ Based on the existing tables, aggregate vessel MMSI indicators are created in th
 
 ## Authors
 This project was conducted as part of Data Science for Social Good (DSSG) Europe 2017 fellowship, further details of 
-the 12 week summer fellowship can be found here:
+the twelve week summer fellowship can be found here:
 https://dssg.uchicago.edu/europe/
 
 **Data science fellows:** Iván Higuera Mendieta, Shubham Tomar, and William Grimes
