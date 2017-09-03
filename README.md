@@ -1,7 +1,7 @@
 # An Illegal Fishing Vessel Risk Framework
 This proof-of-concept system creates a vessel risk framework to assess the likelihood that a vessel engaging in illegal,
-unregulated, or unreported (IUU) fishing at a given point in time. The framework combines AIS tracking data with 
-satellite imagery to show how multiple data sources can be combined to build a library of historic evidence 
+unregulated, or unreported (IUU) fishing at a given point in time. The framework combines automatic identification system (AIS)
+ tracking data with satellite imagery to show how multiple data sources can be combined to build a library of historic evidence 
 and data reflecting a vessel's behaviour. Thus far several indicators have been included, including the likelihood 
 that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the 
 intermittency of the vessel's AIS signal. 
@@ -35,22 +35,8 @@ in the preprocessing and feature generation steps.
 This PostgreSQL command removes nulls, unix timestamps, and coordinates beyond the range for positional and 
 then static data:
 
-```
-DELETE
-FROM ais_messages.full_year_position
-WHERE (mmsi IS NULL OR mmsi < 100000000) 
-OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00') 
-OR (longitude IS NULL OR longitude NOT BETWEEN -180 AND 180)
-OR (latitude IS NULL OR latitude NOT BETWEEN -90 AND 90);
+`psql -f ./sql_scripts/ais_data_cleaning.sql`
 
-```
-
-```
-DELETE
-FROM ais_messages.full_year_static
-WHERE (mmsi IS NULL OR mmsi < 100000000) 
-OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00');
-```
 ### 3. Create schema for modelling
 `psql -c 'CREATE SCHEMA IF NOT EXISTS ais_is_fishing_model;'`
 
@@ -112,10 +98,10 @@ https://dssg.uchicago.edu/europe/
 
 ## Acknowledgments
 The authors would like to thank Euro Beinat and Nishan Degnarain for having the vision to pursue a data science project 
-for detection of IUU fishing vessels. Further the weekly calls and guidance with Nishan Degnarain, and Steven Adler 
-were instrumental to the success of this project.
+for detection of illegal, unreported, and unregulated fishing vessels. Further our weekly calls with Nishan Degnarain, and 
+Steven Adler were instrumental in guiding this project to success.
 
-We also extend our thanks for the helpful input, and discussion with the following: Dan Hammer, Gregory Stone, 
+We also extend our thanks to the following for their input, and helpful discussions: Dan Hammer, Gregory Stone, 
 Kristina Boerder, Kyle Brazil, Nathan Miller, and Paul Woods.
 
 ## License
