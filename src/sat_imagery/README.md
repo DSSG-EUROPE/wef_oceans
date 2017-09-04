@@ -43,11 +43,9 @@ Both codes will create a SQL query which will create a new table with the total 
 #### 3. Croping and dowloading
 GBDX: `python src/sat_imagery/retrieve_gbdx_crop.py`
 
-
 Planet: `python src/sat_imagery/planet_check.py `
 
 The GBDX code will create the buffers and use the GBDX's API crop task to retrieve the cropped images. This images are downloaded to the client S3 bucket. For Planet, the code will project and crop the downloaded images using the `rasterio` library. The code also will save a mosaic of selected cropped images 
-
 
 [Digital Globe]:http://www.digitalglobe.com/
 [Planet Labs]:https://www.planet.com/
