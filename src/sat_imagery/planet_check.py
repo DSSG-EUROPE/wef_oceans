@@ -1,10 +1,3 @@
-
-# coding: utf-8
-
-# # Planet assets download
-
-# In[1]:
-
 #Python modules
 import os
 import time
