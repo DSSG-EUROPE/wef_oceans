@@ -1,5 +1,3 @@
-# coding: utf-8
-
 from utils import db_connect
 import matplotlib.pyplot as plt
 import seaborn as sns
