@@ -1,5 +1,5 @@
 # An Illegal Fishing Vessel Risk Framework
-This proof-of-concept system creates a vessel risk framework to assess the likelihood that a vessel engaging in illegal,
+This proof-of-concept system creates a vessel risk framework to assess the likelihood that a vessel is engaging in illegal,
 unregulated, or unreported (IUU) fishing at a given point in time. The framework combines automatic identification system (AIS)
  tracking data with satellite imagery to show how multiple data sources can be combined to build a library of historic evidence 
 and data reflecting a vessel's behaviour. Thus far several indicators have been included, including the likelihood 
