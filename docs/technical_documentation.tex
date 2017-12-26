@@ -1,23 +1,26 @@
 \documentclass[11pt, english]{article}
+
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{lipsum}
-\usepackage{titlesec}
+%\usepackage{titlesec}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{float}
-\usepackage[apaciteclassic]{apacite}
-%\usepackage[bitstream-charter]{mathdesign}
+\usepackage{cite}
+\usepackage[bitstream-charter]{mathdesign}
 \usepackage{siunitx}
 \usepackage{color}
 \usepackage{setspace}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[toc, acronym]{glossaries}
+\makeglossaries
 \hypersetup{
         colorlinks = true,
-        citecolor = gray
+        citecolor = darkgray
 }
 \usepackage{geometry}
 \geometry{
@@ -27,33 +30,58 @@
         top=20mm,
 }
 
+
 \begin{document}
-\hypersetup{linkcolor=black}
+\hypersetup{linkcolor=darkgray}
 
 \begin{titlepage}
 \hypersetup{pageanchor=false}
     \begin{center}
         \vspace*{1cm}
+        \Huge
+	\par\noindent\rule{\textwidth}{0.4pt} \\ ~ \\
+	Developing a Fishing Risk Framework from Satellites and Ocean Data \\
+        \par\noindent\rule{\textwidth}{0.4pt} \\ ~ \\
         \huge
-	\textsc{A vessel risk framework to identify vessels involved in illegal, unregulated, and unreported fishing} \\~\\
-        \vspace{6cm}
-        \huge
-        \textbf{\textsc{Technical Report}} \\
-        \vspace{6cm}
+        \textbf{\textsc{White Paper}} \\
+        \vspace{5cm}
+        \includegraphics[width=0.8\textwidth]{images/logo} \\
+        \vspace{2cm}
 	\Large
+	\textbf{\textsc{Date last modified:}} \\
         \today \\
-        \vspace{1cm}
-        \includegraphics[width=0.65\textwidth]{images/logo} \\
         \vfill
 	\Large
-	Iv\'{a}n Higuera-Mendieta \hfill Shubham Tomar  \hfill William Grimes \\
+	\textbf{\textsc{Authors:}} \\
+	William \textsc{Grimes} \hfill
+	Iv\'{a}n \textsc{Higuera-Mendieta} \hfill
+	Shubham \textsc{Tomar} \\~\\~\\
+	\begin{minipage}{0.485\textwidth}
+		\begin{flushleft}
+			\Large
+			\textbf{\textsc{Project Manager:}} \\
+			Paul \textsc{Van der Boor}
+		\end{flushleft}
+	\end{minipage}
+	~
+	\begin{minipage}{0.485\textwidth}
+		\begin{flushright}
+			\Large
+			\textbf{\textsc{Technical Mentor:}} \\
+			Jane \textsc{Zanzig}
+		\end{flushright}
+	\end{minipage}
     \end{center}
 \end{titlepage}
 
 \hypersetup{pageanchor=true}
 
+
+\input{sections/glossary} % glossary
+%\input{sections/acronyms} % acronyms
+
 \begin{abstract}
-\input{sections/abstract}
+\input{sections/abstract} % abstract
 \end{abstract}
 
 \clearpage
@@ -64,14 +92,18 @@
 \input{sections/section_2} % previous work
 \input{sections/section_3} % data sources
 \input{sections/section_4} % approach
-\input{sections/section_4_1} %sat_imagery
+\input{sections/section_4_1} % sat_imagery
 \input{sections/section_5} % evaluation
 \input{sections/section_6} % further work
 \input{sections/acknowledgements}
 
-\clearpage  
+\newpage
+\printglossaries
+%\printglossary[type=\acronymtype]
+%\printglossary[type=main]
 
-\bibliographystyle{apacite}
+
 \bibliography{bibliography}
+\bibliographystyle{ieeetr}
 
 \end{document}

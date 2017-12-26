@@ -16,77 +16,80 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand\@newglossary[4]{}
+\@newglossary{main}{glg}{gls}{glo}
+\@newglossary{acronym}{alg}{acr}{acn}
+\providecommand\@glsorder[1]{}
+\providecommand\@istfilename[1]{}
+\@istfilename{technical_documentation.ist}
+\@glsorder{word}
 \select@language{english}
 \@writefile{toc}{\select@language{english}}
 \@writefile{lof}{\select@language{english}}
 \@writefile{lot}{\select@language{english}}
+\citation{sgd14}
+\citation{Myers2003}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Illegal, unreported, and unregulated fishing}{3}{subsection.1.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Sustainable Development Goals}{3}{subsection.1.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Objective}{3}{subsection.1.3}}
+\citation{Tetreault2005}
 \citation{Tello2005}
-\citation{Margarit2009}
-\citation{Brusch2011}
-\citation{Corbane2008}
-\citation{Paes2010}
+\citation{Margarit2009,Brusch2011,Corbane2008,Paes2010}
 \citation{Zhang2006}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Ocean data}{4}{section.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Automatic identification system}{4}{subsection.2.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Satellite imagery}{4}{subsection.2.2}}
 \citation{Corbane2010}
 \citation{Lebona2016}
 \citation{Min2015}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Previous work}{3}{section.2}}
-\citation{Tetreault2005}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Data sources}{4}{section.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Automatic identification system (AIS)}{4}{subsection.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Satellite imagery}{4}{subsection.3.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Detecting weather a vessel is fishing at a given point}{5}{section.4}}
+\citation{de2016correction}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Synthetic-aperture radar}{5}{subsection.2.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Related projects}{5}{section.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Detecting whether a vessel is fishing at a given point}{5}{section.4}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Data}{5}{section.5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Number of positional and static AIS messages for a period of 1 year\relax }}{6}{figure.caption.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Number of positional and static AIS messages for a period of 1 year\relax }}{6}{figure.caption.2}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:AIS broadcast summary}{{1}{6}{Number of positional and static AIS messages for a period of 1 year\relax }{figure.caption.1}{}}
+\newlabel{fig:AIS broadcast summary}{{1}{6}{Number of positional and static AIS messages for a period of 1 year\relax }{figure.caption.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {6}Modelling}{6}{section.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Feature generation}{6}{subsection.6.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Feature importance for AIS positional features.\relax }}{6}{figure.caption.2}}
-\newlabel{fig:Feature importance}{{2}{6}{Feature importance for AIS positional features.\relax }{figure.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Training and cross-validation}{6}{subsection.6.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Temporal splits for each fold\relax }}{7}{figure.caption.3}}
-\newlabel{fig:Temporal Cross-validation}{{3}{7}{Temporal splits for each fold\relax }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Feature generation}{7}{subsection.6.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Feature importance for AIS positional features.\relax }}{7}{figure.caption.3}}
+\newlabel{fig:Feature importance}{{2}{7}{Feature importance for AIS positional features.\relax }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Training and cross-validation}{7}{subsection.6.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Temporal splits for each fold\relax }}{7}{figure.caption.4}}
+\newlabel{fig:Temporal Cross-validation}{{3}{7}{Temporal splits for each fold\relax }{figure.caption.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Model selection}{7}{subsection.6.3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Precision-Recall curve for different models\relax }}{7}{figure.caption.4}}
-\newlabel{fig:Precision-Recall}{{4}{7}{Precision-Recall curve for different models\relax }{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Evaluation}{7}{section.7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Precision-Recall curve for different models\relax }}{8}{figure.caption.5}}
+\newlabel{fig:Precision-Recall}{{4}{8}{Precision-Recall curve for different models\relax }{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Evaluation}{8}{section.7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Distribution of distance to shore in the AIS messages\relax }}{8}{figure.caption.6}}
+\newlabel{fig:Distance to shore distribution}{{5}{8}{Distribution of distance to shore in the AIS messages\relax }{figure.caption.6}{}}
 \citation{Brusch2011}
 \citation{Corbane2008}
 \citation{Greidanus2006}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Distribution of distance to shore in the AIS messages\relax }}{8}{figure.caption.5}}
-\newlabel{fig:Distance to shore distribution}{{5}{8}{Distribution of distance to shore in the AIS messages\relax }{figure.caption.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Fishing score distributions for reported and non reported fishing vessels.\relax }}{8}{figure.caption.6}}
-\newlabel{fig:Fishing score distribution}{{6}{8}{Fishing score distributions for reported and non reported fishing vessels.\relax }{figure.caption.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Intersection AIS and Satellite imagery}{8}{subsection.7.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Overlap Digital Globe and AIS data (May 2016 - June 2017)\relax }}{9}{figure.caption.7}}
-\newlabel{overlap}{{7}{9}{Overlap Digital Globe and AIS data (May 2016 - June 2017)\relax }{figure.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Cropped images from Planet (May 2016 - June 2017)\relax }}{10}{figure.caption.8}}
-\newlabel{mosaic}{{8}{10}{Cropped images from Planet (May 2016 - June 2017)\relax }{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Evaluation methodology}{10}{section.8}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Future work}{10}{section.9}}
-\bibstyle{apacite}
-\bibdata{bibliography.bib}
-\bibcite{Brusch2011}{\citeauthoryear {Brusch\ \BOthers {.}}{Brusch\ \BOthers {.}}{{\APACyear {2011}}}}
-\APACbibcite{Brusch2011}{\citeauthoryear {Brusch\ \BOthers {.}}{Brusch\ \BOthers {.}}{{\APACyear {2011}}}}
-\bibcite{Corbane2008}{\citeauthoryear {Corbane, Marre,{}\ \BBA{} Petit}{Corbane\ \BOthers {.}}{{\APACyear {2008}}}}
-\APACbibcite{Corbane2008}{\citeauthoryear {Corbane, Marre,{}\ \BBA{} Petit}{Corbane\ \BOthers {.}}{{\APACyear {2008}}}}
-\bibcite{Corbane2010}{\citeauthoryear {Corbane, Najman, Pecoul, Demagistri,{}\ \BBA{} Petit}{Corbane\ \BOthers {.}}{{\APACyear {2010}}}}
-\APACbibcite{Corbane2010}{\citeauthoryear {Corbane, Najman, Pecoul, Demagistri,{}\ \BBA{} Petit}{Corbane\ \BOthers {.}}{{\APACyear {2010}}}}
-\bibcite{Greidanus2006}{\citeauthoryear {Greidanus\ \BBA{} Kourti}{Greidanus\ \BBA{} Kourti}{{\APACyear {2006}}}}
-\APACbibcite{Greidanus2006}{\citeauthoryear {Greidanus\ \BBA{} Kourti}{Greidanus\ \BBA{} Kourti}{{\APACyear {2006}}}}
-\bibcite{Lebona2016}{\citeauthoryear {Lebona, Kleynhans, Celik,{}\ \BBA{} Mdakane}{Lebona\ \BOthers {.}}{{\APACyear {2016}}}}
-\APACbibcite{Lebona2016}{\citeauthoryear {Lebona, Kleynhans, Celik,{}\ \BBA{} Mdakane}{Lebona\ \BOthers {.}}{{\APACyear {2016}}}}
-\bibcite{Margarit2009}{\citeauthoryear {Margarit, Milan{\'{e}}s,{}\ \BBA{} Tabasco}{Margarit\ \BOthers {.}}{{\APACyear {2009}}}}
-\APACbibcite{Margarit2009}{\citeauthoryear {Margarit, Milan{\'{e}}s,{}\ \BBA{} Tabasco}{Margarit\ \BOthers {.}}{{\APACyear {2009}}}}
-\bibcite{Min2015}{\citeauthoryear {Min}{Min}{{\APACyear {2015}}}}
-\APACbibcite{Min2015}{\citeauthoryear {Min}{Min}{{\APACyear {2015}}}}
-\bibcite{Paes2010}{\citeauthoryear {Paes, Lorenzzetti,{}\ \BBA{} Gherardi}{Paes\ \BOthers {.}}{{\APACyear {2010}}}}
-\APACbibcite{Paes2010}{\citeauthoryear {Paes, Lorenzzetti,{}\ \BBA{} Gherardi}{Paes\ \BOthers {.}}{{\APACyear {2010}}}}
-\bibcite{Tello2005}{\citeauthoryear {Tello, Lopez-Martinez,{}\ \BBA{} Mallorqui}{Tello\ \BOthers {.}}{{\APACyear {2005}}}}
-\APACbibcite{Tello2005}{\citeauthoryear {Tello, Lopez-Martinez,{}\ \BBA{} Mallorqui}{Tello\ \BOthers {.}}{{\APACyear {2005}}}}
-\bibcite{Tetreault2005}{\citeauthoryear {Tetreault}{Tetreault}{{\APACyear {2005}}}}
-\APACbibcite{Tetreault2005}{\citeauthoryear {Tetreault}{Tetreault}{{\APACyear {2005}}}}
-\bibcite{Zhang2006}{\citeauthoryear {Zhang, Wu, Zhang, Huang,{}\ \BBA{} Tian}{Zhang\ \BOthers {.}}{{\APACyear {2006}}}}
-\APACbibcite{Zhang2006}{\citeauthoryear {Zhang, Wu, Zhang, Huang,{}\ \BBA{} Tian}{Zhang\ \BOthers {.}}{{\APACyear {2006}}}}
-\@writefile{toc}{\contentsline {section}{References}{11}{section.9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Fishing score distributions for reported and non reported fishing vessels.\relax }}{9}{figure.caption.7}}
+\newlabel{fig:Fishing score distribution}{{6}{9}{Fishing score distributions for reported and non reported fishing vessels.\relax }{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Intersection AIS and Satellite imagery}{9}{subsection.7.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Overlap Digital Globe and AIS data (May 2016 - June 2017)\relax }}{10}{figure.caption.8}}
+\newlabel{overlap}{{7}{10}{Overlap Digital Globe and AIS data (May 2016 - June 2017)\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Cropped images from Planet (May 2016 - June 2017)\relax }}{10}{figure.caption.9}}
+\newlabel{mosaic}{{8}{10}{Cropped images from Planet (May 2016 - June 2017)\relax }{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Evaluation methodology}{11}{section.8}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Future work}{11}{section.9}}
+\@writefile{toc}{\contentsline {section}{Glossary}{12}{section*.11}}
+\bibdata{bibliography}
+\bibcite{sgd14}{1}
+\bibcite{Myers2003}{2}
+\bibcite{Tello2005}{3}
+\bibcite{Margarit2009}{4}
+\bibcite{Brusch2011}{5}
+\bibcite{Corbane2008}{6}
+\bibcite{Paes2010}{7}
+\bibcite{Zhang2006}{8}
+\bibcite{Corbane2010}{9}
+\bibcite{Lebona2016}{10}
+\bibcite{Min2015}{11}
+\bibcite{de2016correction}{12}
+\bibcite{Tetreault2005}{13}
+\bibcite{Greidanus2006}{14}
+\bibstyle{ieeetr}
