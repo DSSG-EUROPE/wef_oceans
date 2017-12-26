@@ -1,23 +1,10 @@
-# An Illegal Fishing Vessel Risk Framework
-This proof-of-concept system creates a vessel risk framework to assess the likelihood that a vessel engaging in illegal,
-unregulated, or unreported (IUU) fishing at a given point in time. The framework combines automatic identification system (AIS)
- tracking data with satellite imagery to show how multiple data sources can be combined to build a library of historic evidence 
-and data reflecting a vessel's behaviour. Thus far several indicators have been included, including the likelihood 
-that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the 
-intermittency of the vessel's AIS signal. 
+# A Fishing Risk Framework from Satellites and Ocean Data
+This proof-of-concept system assess vessels in a risk framework considering multiple factors to suggest the likelihood that a vessel has been engaging in illegal, unregulated, or unreported (IUU) fishing. The framework combines automatic identification system (AIS) tracking data with satellite imagery in construction of a risk framework. The framework combines several indicators including: the likelihood that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the intermittency of the vessel's AIS signal. 
 
-Vessel risk indicators can be considered individually, weighted according to the use case, or combined into a unified 
-vessel risk score. This information is displayed in a front end web application. This application gives governments, 
-NGOs, retailers, and enforcement agencies the information to distinguish responsible, legitimate vessels from 
-vessels doing IUU fishing. For example, this could be used by retailers to check the risk score of vessels that supply
-their tuna, or to guide enforcement agencies in choosing which areas to patrol. 
+Vessel risk indicators may be considered individually, or weighted according to the users interest, or combined into a unified vessel risk score. This information is displayed in a front end web application, which gives governments, NGOs, retailers, and enforcement agencies the information to distinguish responsible, legitimate vessels from vessels doing IUU fishing. For example, this could be used by retailers to check the risk score of vessels that supply their tuna, or to guide enforcement agencies in choosing which areas to patrol. 
 
 ## How to run the pipeline
-Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, 
-feature generation, and modelling were performed in Python, with risk indicators created in PSQL, and the web application 
-made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be 
-consulted [here](../master/src/sat_imagery/README.md). Instructions to run the RShiny app are 
-[here](../master/shiny_app/README.md)
+Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, feature generation, and modelling were performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be viewed [here](../master/src/sat_imagery/README.md). Instructions to run the RShiny app are [here](../master/shiny_app/README.md).
 
 ### Requirements
 Before running the pipeline the following commands should be executed:
@@ -33,7 +20,7 @@ in the preprocessing and feature generation steps.
 
 ### 2. Data cleaning
 This PostgreSQL command removes nulls, unix timestamps, and coordinates beyond the range for positional and 
-then static data:
+then static data.
 
 `psql -f ./sql_scripts/ais_data_cleaning.sql`
 
@@ -41,20 +28,17 @@ then static data:
 `psql -c 'CREATE SCHEMA IF NOT EXISTS ais_is_fishing_model;'`
 
 ### 4. Pre-processing and feature generation 
-This script removes duplicate data and null values and generates additional features, including distance to shore
-and distance to port for each vessel at each time point, and whether it is nighttime or daytime. 
+This script removes duplicate data and null values and generates additional features, including distance to shore and distance to port for each vessel at each time point, and whether it is nighttime or daytime. 
 
 `python src/models/is_fishing/preprocess_data.py`
 
-### 5. Train model to predict whether a vessel is fishing at each time point
-This uses labelled training data to generate a model to predict whether a vessel is fishing at each time point. 
-A random forest model with 450 trees was used and the model output was saved in the `models` directory.
+### 5. Train model to predict whether a vessel is fishing at each time point 
+This uses labelled training data to generate a model to predict whether a vessel is fishing at each time point. A random forest model with 450 trees was used and the model output was saved in the `models` directory.
 
 `python src/models/is_fishing/train_is_fishing.py`
 
 ### 6. Predict if vessel is fishing
-This code reads from the PostgreSQl database in chunks and predicts for each vessel at each time point the 
-probability that it is fishing.
+This code reads from the PostgreSQl database in chunks and predicts for each vessel at each time point the probability that it is fishing.
 
 `python src/models/is_fishing/predict_is_fishing.py`
 
@@ -64,10 +48,7 @@ This creates a count of the number of available rows in both AIS static and posi
 `psql -f ./sql_scripts/create_unique_vessel_register.sql`
 
 ### 8. Create a score of the number of times vessel was in marine protected areas over a given time period
-First, running `bash ./sql_scripts/get_wdpa.sh` will download a shapefile with all the 
-[World Protected Areas](https://www.protectedplanet.net), and create and upload the schema and the data to a 
-PostgreSQL instance. Second, using the uploaded table, the `marine_protected_areas_within.sql` script will 
-create a unique vessel score to account for the presence of vessels in MPA's:
+First, running `bash ./sql_scripts/get_wdpa.sh` will download a shapefile with all the [World Protected Areas](https://www.protectedplanet.net), and create and upload the schema and the data to a PostgreSQL instance. Second, using the uploaded table, the `marine_protected_areas_within.sql` script will create a unique vessel score to account for the presence of vessels in MPA's.
 
 `psql -f ./sql_scripts/marine_protected_areas_within.sql`
 
@@ -92,9 +73,9 @@ https://dssg.uchicago.edu/europe/
 
 **Data science fellows:** Iván Higuera Mendieta, Shubham Tomar, and William Grimes
 
-**Technical mentor:** Jane Zanzig
-
 **Project manager:** Paul van der Boor
+
+**Technical mentor:** Jane Zanzig
 
 ## Acknowledgments
 The authors would like to thank Euro Beinat and Nishan Degnarain for having the vision to pursue a data science project 
@@ -209,3 +190,4 @@ WHERE (mmsi IS NULL OR mmsi < 100000000)
 OR (timestamp IS NULL OR timestamp = '1970-01-01 00:00:00');
 ```
 -->
+
