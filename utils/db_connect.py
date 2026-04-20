@@ -12,29 +12,27 @@ the following initialisation files:
 Documentation of AIS message fields is available here
 https://spire.com/contact/developer-portal/
 """
-from configparser import ConfigParser, SafeConfigParser
-from geoalchemy2 import *
+
 import os
+import sys
+from configparser import ConfigParser
+
 import pandas as pd
 import psycopg2
 import sqlalchemy
 from sqlalchemy import *
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import *
-import sys
 
-config_pscopg2 = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_psycopg2.ini')
+config_pscopg2 = os.path.join(
+    os.path.dirname(__file__), "../auth/database_psycopg2.ini"
+)
 
-config_alchemy = os.path.join(os.path.dirname(__file__),
-                              '../auth/database_alchemy.ini')
+config_alchemy = os.path.join(os.path.dirname(__file__), "../auth/database_alchemy.ini")
 
-parser = SafeConfigParser()
-parser.read(config_alchemy)
-url = parser.get('postgresql', 'url')
 
-def config(filename=config_pscopg2, section='postgresql'):
-    """ define parameters for PostgreSQL database connection """
+def config(filename=config_pscopg2, section="postgresql"):
+    """define parameters for PostgreSQL database connection"""
 
     parser = ConfigParser()
     parser.read(filename)
@@ -46,12 +44,14 @@ def config(filename=config_pscopg2, section='postgresql'):
             database[param[0]] = param[1]
     else:
         raise Exception(
-            'Section {0} not found in the {1} file'.format(section, filename))
+            "Section {0} not found in the {1} file".format(section, filename)
+        )
 
     return database
 
+
 def query(sql_query):
-    """ connect to PostgreSQL database server with psycopg2 and run query """
+    """connect to PostgreSQL database server with psycopg2 and run query"""
 
     conn = None
 
@@ -71,11 +71,20 @@ def query(sql_query):
         if conn is not None:
             conn.close()
 
+
 def alchemy_connect():
     """
     connect to database with sqlalchemy url.
     """
+    parser = ConfigParser()
+    parser.read(config_alchemy)
+    if not parser.has_section("postgresql"):
+        raise Exception(
+            "Section postgresql not found in the {0} file".format(config_alchemy)
+        )
+    url = parser.get("postgresql", "url")
     return create_engine(url)
+
 
 def alchemy_input_output_open():
     """
@@ -89,6 +98,7 @@ def alchemy_input_output_open():
     conn_output = engine_output.connect()
     return conn_input, conn_output
 
+
 def alchemy_input_output_close(conn_input, conn_output):
     """
     close input and output connections from sqlalchemy.
@@ -96,8 +106,8 @@ def alchemy_input_output_close(conn_input, conn_output):
     conn_input.close()
     conn_output.close()
 
-if __name__ == '__main__':
 
+if __name__ == "__main__":
     # run queries from command line taking query as argument
     data = query(sys.argv[1])
     print(data)

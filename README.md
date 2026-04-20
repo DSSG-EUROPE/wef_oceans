@@ -1,7 +1,91 @@
 # A Fishing Risk Framework from Satellites and Ocean Data
-This proof-of-concept system assess vessels in a risk framework considering multiple factors to suggest the likelihood that a vessel has been engaging in illegal, unregulated, or unreported (IUU) fishing. The framework combines automatic identification system (AIS) tracking data with satellite imagery in construction of a risk framework. The framework combines several indicators including: the likelihood that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the intermittency of the vessel's AIS signal. 
+This proof-of-concept system assess vessels in a risk framework considering multiple factors to suggest the likelihood that a vessel has been engaging in illegal, unregulated, or unreported (IUU) fishing. The framework combines automatic identification system (AIS) tracking data with satellite imagery in construction of a risk framework. The framework combines several indicators including: the likelihood that a vessel has previously fished in a marine protected area (MPA) or exclusive economic zone (EEZ), and the intermittency of the vessel's AIS signal.
 
-Vessel risk indicators may be considered individually, or weighted according to the users interest, or combined into a unified vessel risk score. This information is displayed in a front end web application, which gives governments, NGOs, retailers, and enforcement agencies the information to distinguish responsible, legitimate vessels from vessels doing IUU fishing. For example, this could be used by retailers to check the risk score of vessels that supply their tuna, or to guide enforcement agencies in choosing which areas to patrol. 
+Vessel risk indicators may be considered individually, or weighted according to the users interest, or combined into a unified vessel risk score. This information is displayed in a front end web application, which gives governments, NGOs, retailers, and enforcement agencies the information to distinguish responsible, legitimate vessels from vessels doing IUU fishing. For example, this could be used by retailers to check the risk score of vessels that supply their tuna, or to guide enforcement agencies in choosing which areas to patrol.
+
+## Project structure
+
+- `src/`: Python pipeline and satellite imagery scripts
+- `sql_scripts/`: PostgreSQL/PostGIS data processing and score generation
+- `shiny_app/`: legacy R Shiny dashboard and app assets
+- `auth/`: example credential files (never commit real secrets)
+- `envs/`: legacy Conda environment definition from the original project
+- `notebooks/`: exploratory analysis and data exploration code
+- `docs/`: technical documentation and report sources
+
+## Developer setup
+
+This repository contains legacy code from 2017. The original Conda environment is preserved in `envs/development.yml`, but new development should use Poetry and a modern Python runtime.
+
+1. Install Python 3.11 or 3.12.
+2. Install Poetry if needed:
+   - `python -m pip install --user poetry`
+3. Install project dependencies:
+   - `poetry install`
+   - for geospatial extras: `poetry install --extras geo`
+4. Activate the Poetry shell:
+   - `poetry shell`
+5. Create credential files from examples:
+   - `cp auth/db_credentials_example auth/db_credentials`
+   - `cp auth/database_alchemy.dummy auth/database_alchemy.ini`
+   - `cp auth/database_psycopg2.dummy auth/database_psycopg2.ini`
+6. Load environment variables:
+   - `source environment_variables`
+
+## Testing
+
+- Run the test suite with `poetry run pytest`
+
+## Running the new dashboard
+
+A new Streamlit dashboard is available at `app.py`.
+
+Run it with:
+
+```bash
+poetry run streamlit run app.py
+```
+
+If you want to install the dashboard dependencies as part of Poetry, use:
+
+```bash
+poetry install --extras app
+```
+
+## Training and model selection
+
+The pipeline now supports different classifiers for the fishing model.
+
+- Train a random forest:
+
+```bash
+poetry run python src/models/is_fishing/train_is_fishing.py --model-type random_forest --output-model models/model_random_forest.pkl
+```
+
+- Train a gradient boosting model:
+
+```bash
+poetry run python src/models/is_fishing/train_is_fishing.py --model-type gradient_boosting --output-model models/model_gradient_boosting.pkl
+```
+
+- Train a logistic regression baseline:
+
+```bash
+poetry run python src/models/is_fishing/train_is_fishing.py --model-type logistic_regression --output-model models/model_logistic_regression.pkl
+```
+
+- Run predictions with any saved model:
+
+```bash
+poetry run python src/models/is_fishing/predict_is_fishing.py --model-path models/model_random_forest.pkl --output-table test_data_predictions
+```
+
+> If you still need `requirements.txt` for compatibility, it can be regenerated from Poetry with `poetry export -f requirements.txt --output requirements.txt --without-hashes`.
+
+## Notes
+
+- `envs/development.yml` is retained for archival reference and is not recommended for new development.
+- The `shiny_app/` R dashboard is legacy and requires a separate R environment.
 
 ## How to run the pipeline
 Running this pipeline requires a PostgreSQL database, Anaconda Python 3.4, and R (3.4.1). Pre-processing, feature generation, and modelling were performed in Python, with risk indicators created in PSQL, and the web application made in R Shiny. A separate pipeline to run the intersection between AIS tracking data and satellite imagery can be viewed [here](../master/src/sat_imagery/README.md). Instructions to run the RShiny app are [here](../master/shiny_app/README.md).
