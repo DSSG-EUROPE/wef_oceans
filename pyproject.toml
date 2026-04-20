@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "wef-oceans"
+version = "0.1.0"
+description = "Fishing risk framework from satellites and ocean data"
+authors = ["DSSG-EUROPE <noreply@example.com>"]
+readme = "README.md"
+license = "MIT"
+packages = [
+  { include = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.24"
+pandas = "^2.1"
+scikit-learn = "^1.3"
+matplotlib = "^3.8"
+sqlalchemy = "^2.0"
+psycopg2-binary = "^2.9"
+joblib = "^1.5"
+streamlit = { version = "^1.30", optional = true }
+pydeck = { version = "^0.11", optional = true }
+
+[tool.poetry.extras]
+geo = [
+  "geopandas",
+  "shapely",
+  "pyproj",
+  "rasterio",
+  "fiona",
+  "cartopy",
+  "requests",
+  "geojson",
+  "dbfread",
+  "timezonefinder",
+  "ephem",
+  "descartes",
+  "folium",
+  "seaborn"
+]
+app = ["streamlit", "pydeck"]
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.0"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-q"
+testpaths = ["tests"]
+python_files = ["test_*.py"]

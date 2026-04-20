@@ -1,47 +1,83 @@
-"""
-"""
+"""Predict fishing labels for AIS vessel data using a trained model."""
 
-import os
-import numpy as np
-import pandas as pd
-import datetime as dt
+import argparse
 import itertools
+from pathlib import Path
 
-import sklearn
-from sklearn.externals import joblib
+import joblib
+import pandas as pd
 
-import utils
 from utils import db_connect, db_manipulate
 
-import src
-import config
-import itertools
-import preprocess_data
+from . import config
 
-def predict_chunk(chunk):
-    features = list(itertools.chain.from_iterable(config.features.values()))
 
-    model = joblib.load(os.path.join(os.path.dirname(__file__),
-                                     '../../../models/model_1.pkl'))
-    chunk_features = chunk[features]
-    predictions = pd.Series(model.predict_proba(chunk_features)[:,1],
-                            name = 'is_fishing')
-    chunk.reset_index(drop=True, inplace=True)
-    predictions.reset_index(drop=True, inplace=True)
-    chunk = pd.concat([chunk, predictions], axis=1)
-    return chunk
+def get_feature_columns():
+    return list(itertools.chain.from_iterable(config.features.values()))
+
+
+def load_model(model_path="models/model_1.pkl"):
+    return joblib.load(model_path)
+
+
+def predict_dataframe(model, df):
+    features = get_feature_columns()
+    missing = [f for f in features if f not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required features: {missing}")
+
+    predictions = pd.Series(model.predict_proba(df[features])[:, 1], name="is_fishing")
+    return pd.concat(
+        [df.reset_index(drop=True), predictions.reset_index(drop=True)], axis=1
+    )
+
+
+def predict_table(
+    read_query,
+    model_path,
+    output_schema,
+    output_table,
+    chunk_size=10000,
+    parallel=True,
+):
+    model = load_model(model_path)
+
+    def predict_chunk(chunk):
+        return predict_dataframe(model, chunk)
+
+    db_manipulate.loop_chunks(
+        read_query,
+        predict_chunk,
+        output_schema,
+        output_table,
+        size_chunk=chunk_size,
+        parallel=parallel,
+    )
+
 
 def main():
+    parser = argparse.ArgumentParser(description="Run fishing predictions on AIS data.")
+    parser.add_argument(
+        "--read-query",
+        default="SELECT * FROM ais_is_fishing_model.test_data_features;",
+        help="SQL query to read input data",
+    )
+    parser.add_argument("--model-path", default="models/model_1.pkl")
+    parser.add_argument("--output-schema", default="ais_is_fishing_model")
+    parser.add_argument("--output-table", default="test_data_predictions")
+    parser.add_argument("--chunk-size", type=int, default=10000)
+    parser.add_argument("--no-parallel", action="store_true")
+    args = parser.parse_args()
 
-    table_read = "SELECT * \
-                  FROM ais_is_fishing_model.test_data_features;"
+    predict_table(
+        args.read_query,
+        args.model_path,
+        args.output_schema,
+        args.output_table,
+        chunk_size=args.chunk_size,
+        parallel=not args.no_parallel,
+    )
 
-    db_manipulate.loop_chunks(table_read,
-                               predict_chunk,
-                               'ais_is_fishing_model',
-                               'test_data_predictions',
-                               10000,
-                               parallel=True)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
